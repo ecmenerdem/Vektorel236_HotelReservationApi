@@ -1,3 +1,4 @@
+using HotelReservation.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservation.API.Controllers
@@ -31,6 +32,9 @@ namespace HotelReservation.API.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+
+    
+
 
         }
     }

@@ -6,6 +6,6 @@ namespace HotelReservation.Domain.Repository
 {
     public interface IUserRepository:IRepository<User>
     {
-       
+       Task<User> LoginAsync(User user);
     }
 }

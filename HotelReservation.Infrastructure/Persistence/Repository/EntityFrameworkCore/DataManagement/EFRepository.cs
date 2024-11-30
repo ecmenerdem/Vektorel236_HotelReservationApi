@@ -16,10 +16,10 @@ namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFramework
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
-        public EFRepository(DbContext dbContext, DbSet<T> dbSet)
+        public EFRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
-            _dbSet = dbSet;
+            _dbSet = _dbContext.Set<T>();
         }
 
         public async ValueTask AddAsync(T entity)
@@ -30,6 +30,7 @@ namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFramework
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
+
         }
 
         public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, params string[] includeProperties)
@@ -67,6 +68,7 @@ namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFramework
         public void Update(T entity)
         {
             _dbSet.Update(entity);
+
         }
     }
 }

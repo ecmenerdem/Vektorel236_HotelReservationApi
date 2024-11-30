@@ -11,7 +11,7 @@ namespace HotelReservation.Domain.Repository
 {
     public interface IHotelRepository:IRepository<Hotel>
     {
-      
+        Task<Hotel> GetHotelByRoomId(int RoomID);
       
     }
 }

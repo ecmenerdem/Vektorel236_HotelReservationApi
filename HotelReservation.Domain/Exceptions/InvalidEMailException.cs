@@ -12,5 +12,10 @@ namespace HotelReservation.Domain.Exceptions
         {
             
         }
+
+        public InvalidEMailException(string message):base(message)
+        {
+            
+        }
     }
 }
