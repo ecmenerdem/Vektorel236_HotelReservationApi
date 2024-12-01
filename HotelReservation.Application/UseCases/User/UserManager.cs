@@ -1,11 +1,14 @@
-﻿using HotelReservation.Application.Contracts.Persistence;
+﻿using FluentValidation.Results;
+using HotelReservation.Application.Contracts.Persistence;
 using HotelReservation.Application.DTO.User;
+using HotelReservation.Application.UseCases.User.Validation;
 using HotelReservation.Domain.Entity;
 using HotelReservation.Domain.Exceptions;
 using HotelReservation.Domain.Repository;
 using HotelReservation.Domain.Repository.DataManagement;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +27,9 @@ namespace HotelReservation.Application.UseCases.User
 
         public async Task<Domain.Entity.User> AddUser(Domain.Entity.User user)
         {
+
+          
+
             /*Bu if kullanıcı adı daha önce kayıtlı mı? diye kontrol ediyor*/
             if ((await GetUserByUsername(user.Username)) is not null)
             {
@@ -81,7 +87,31 @@ namespace HotelReservation.Application.UseCases.User
 
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
         {
-            var loginUser = await _uow.UserRepository.LoginAsync(loginRequestDTO);
+            LoginValidator loginValidator = new LoginValidator();
+
+            var validationResult  = loginValidator.Validate(loginRequestDTO);
+
+            if (!validationResult.IsValid)
+            {
+                List<ValidationFailure> errors = new List<ValidationFailure>();
+
+                foreach (var item in validationResult.Errors)
+                {
+                    errors.Add(new() { ErrorMessage=item.ErrorMessage});
+                }
+
+                throw new FluentValidation.ValidationException(errors);
+
+            }
+
+
+           
+
+            Domain.Entity.User user = new Domain.Entity.User();
+            user.Username = loginRequestDTO.Username;
+            user.Password = loginRequestDTO.Password;
+
+           var loginUser = await _uow.UserRepository.LoginAsync(user);
 
             if (loginUser is null)
             {
