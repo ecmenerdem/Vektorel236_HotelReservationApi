@@ -35,6 +35,15 @@ namespace HotelReservation.Application.UseCases.User
             await _genericValidator.ValidateAsync(userRegistrationRequestDTO, typeof(UserRegistrationValidator));
            
 
+           
+
+
+         
+
+
+           
+
+
             /*Bu if kullanıcı adı daha önce kayıtlı mı? diye kontrol ediyor*/
             if ((await GetUserByUsername(userRegistrationRequestDTO.KullaniciAdi)) is not null)
             {
@@ -104,7 +113,28 @@ namespace HotelReservation.Application.UseCases.User
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
         {
 
-            await _genericValidator.ValidateAsync(loginRequestDTO, typeof(LoginValidator));
+
+            await _genericValidator.ValidateAsync(loginRequestDTO,typeof(LoginValidator));
+
+            //LoginValidator loginValidator = new LoginValidator();
+
+            //var validationResult  = loginValidator.Validate(loginRequestDTO);
+
+            //if (!validationResult.IsValid)
+            //{
+            //    List<ValidationFailure> errors = new List<ValidationFailure>();
+
+            //    foreach (var item in validationResult.Errors)
+            //    {
+            //        errors.Add(new() { ErrorMessage=item.ErrorMessage});
+            //    }
+
+            //    throw new FluentValidation.ValidationException(errors);
+
+            //}
+
+
+           
 
             Domain.Entity.User user = new Domain.Entity.User();
             user.Username = loginRequestDTO.KullaniciAdi;
