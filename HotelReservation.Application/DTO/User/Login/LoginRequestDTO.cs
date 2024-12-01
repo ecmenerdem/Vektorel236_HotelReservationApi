@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelReservation.Application.DTO.User
+namespace HotelReservation.Application.DTO.User.Login
 {
     public class LoginRequestDTO
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string KullaniciAdi { get; set; }
+        public string Sifre { get; set; }
     }
 }

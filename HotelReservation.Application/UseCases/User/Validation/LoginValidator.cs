@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using HotelReservation.Application.DTO.User;
+using HotelReservation.Application.DTO.User.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,8 @@ namespace HotelReservation.Application.UseCases.User.Validation
     {
         public LoginValidator()
         {
-           RuleFor(x => x.Username).NotEmpty().WithMessage("Kullanıcı Adı Boş Olamaz");
-           RuleFor(q=>q.Password).NotEmpty().WithMessage("Şifre Boş Olamaz");
+           RuleFor(x => x.KullaniciAdi).NotEmpty().WithMessage("Kullanıcı Adı Boş Olamaz");
+           RuleFor(q=>q.Sifre).NotEmpty().WithMessage("Şifre Boş Olamaz");
         }
     }
 }

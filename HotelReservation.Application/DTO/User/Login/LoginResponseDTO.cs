@@ -5,29 +5,30 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace HotelReservation.Application.DTO.User
+namespace HotelReservation.Application.DTO.User.Login
 {
     public class LoginResponseDTO
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Ad { get; set; }
+        public string Soyad { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Username { get; set; }
+        public string KullaniciAdi { get; set; }
 
         public string Token { get; set; }
 
-        public string Fullname {
+        public string AdSoyad
+        {
 
             get
             {
 
-            return FirstName+" " +LastName; 
-            
+                return Ad + " " + Soyad;
+
             }
-            
-        
-        
+
+
+
         }
 
     }

@@ -1,6 +1,8 @@
 ﻿using FluentValidation.Results;
 using HotelReservation.Application.Contracts.Persistence;
-using HotelReservation.Application.DTO.User;
+using HotelReservation.Application.Contracts.Validation;
+using HotelReservation.Application.DTO.User.Login;
+using HotelReservation.Application.DTO.User.Registration;
 using HotelReservation.Application.UseCases.User.Validation;
 using HotelReservation.Domain.Entity;
 using HotelReservation.Domain.Exceptions;
@@ -19,29 +21,43 @@ namespace HotelReservation.Application.UseCases.User
     public class UserManager : IUserService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IGenericValidator _genericValidator;
 
-        public UserManager(IUnitOfWork uow)
+        public UserManager(IUnitOfWork uow, IGenericValidator genericValidator)
         {
             _uow = uow;
+            _genericValidator = genericValidator;
         }
 
-        public async Task<Domain.Entity.User> AddUser(Domain.Entity.User user)
+        public async Task<Domain.Entity.User> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
         {
 
-          
+            await _genericValidator.ValidateAsync(userRegistrationRequestDTO, typeof(UserRegistrationValidator));
+           
 
             /*Bu if kullanıcı adı daha önce kayıtlı mı? diye kontrol ediyor*/
-            if ((await GetUserByUsername(user.Username)) is not null)
+            if ((await GetUserByUsername(userRegistrationRequestDTO.KullaniciAdi)) is not null)
             {
                 throw new InvalidUsernameForRegistrationException();
 
             }
 
             /*Bu if e-posta daha önce kayıtlı mı? diye kontrol ediyorr*/
-            if ((await GetUserByEmail(user.Email)) is not null)
+            if ((await GetUserByEmail(userRegistrationRequestDTO.EPosta)) is not null)
             {
                 throw new InvalidEMailException();
             }
+
+            Domain.Entity.User user = new Domain.Entity.User()
+            {
+                FirstName = userRegistrationRequestDTO.Ad,
+                LastName = userRegistrationRequestDTO.Soyad,
+                Username = userRegistrationRequestDTO.KullaniciAdi,
+                Password = userRegistrationRequestDTO.Sifre,
+                PhoneNumber = userRegistrationRequestDTO.TelNo,
+                Email = userRegistrationRequestDTO.EPosta
+            };
+
 
             await _uow.UserRepository.AddAsync(user);
             await _uow.SaveChangeAsync();
@@ -87,38 +103,28 @@ namespace HotelReservation.Application.UseCases.User
 
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
         {
-            LoginValidator loginValidator = new LoginValidator();
 
-            var validationResult  = loginValidator.Validate(loginRequestDTO);
-
-            if (!validationResult.IsValid)
-            {
-                List<ValidationFailure> errors = new List<ValidationFailure>();
-
-                foreach (var item in validationResult.Errors)
-                {
-                    errors.Add(new() { ErrorMessage=item.ErrorMessage});
-                }
-
-                throw new FluentValidation.ValidationException(errors);
-
-            }
-
-
-           
+            await _genericValidator.ValidateAsync(loginRequestDTO, typeof(LoginValidator));
 
             Domain.Entity.User user = new Domain.Entity.User();
-            user.Username = loginRequestDTO.Username;
-            user.Password = loginRequestDTO.Password;
+            user.Username = loginRequestDTO.KullaniciAdi;
+            user.Password = loginRequestDTO.Sifre;
 
            var loginUser = await _uow.UserRepository.LoginAsync(user);
+
+            LoginResponseDTO loginResponseDTO = new()
+            {
+                Ad = loginUser.FirstName,
+                Soyad = loginUser.LastName,
+                KullaniciAdi = loginUser.Username,
+            };
 
             if (loginUser is null)
             {
                 throw new InvalidUserCridentialsException();
             }
 
-            return loginUser;
+            return loginResponseDTO;
         }
 
         public async Task<bool> UpdateUser(Domain.Entity.User user)
