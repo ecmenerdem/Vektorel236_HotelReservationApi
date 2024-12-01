@@ -1,4 +1,5 @@
 ﻿using HotelReservation.Application.Contracts.Persistence;
+using HotelReservation.Application.DTO.User;
 using HotelReservation.Domain.Entity;
 using HotelReservation.Domain.Exceptions;
 using HotelReservation.Domain.Repository;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace HotelReservation.Application.UseCases.User
 {
@@ -36,7 +38,7 @@ namespace HotelReservation.Application.UseCases.User
             }
 
             await _uow.UserRepository.AddAsync(user);
-           await _uow.SaveChangeAsync();
+            await _uow.SaveChangeAsync();
             return user;
 
         }
@@ -75,6 +77,18 @@ namespace HotelReservation.Application.UseCases.User
         public async Task<Domain.Entity.User> GetUserByUsername(string userName)
         {
             return await _uow.UserRepository.GetAsync(q => q.Username == userName);
+        }
+
+        public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
+        {
+            var loginUser = await _uow.UserRepository.LoginAsync(loginRequestDTO);
+
+            if (loginUser is null)
+            {
+                throw new InvalidUserCridentialsException();
+            }
+
+            return loginUser;
         }
 
         public async Task<bool> UpdateUser(Domain.Entity.User user)

@@ -1,4 +1,5 @@
-﻿using HotelReservation.Domain.Entity;
+﻿using HotelReservation.Application.DTO.User;
+using HotelReservation.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace HotelReservation.Application.Contracts.Persistence
         Task<bool> DeleteUser(int id);
         Task<User> AddUser(User user);
         Task<IEnumerable<User>> GetDeletedUsers();
+        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO);
 
 
     }
