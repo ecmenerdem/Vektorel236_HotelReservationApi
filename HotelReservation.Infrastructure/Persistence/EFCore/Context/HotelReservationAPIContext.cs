@@ -1,13 +1,4 @@
-﻿using HotelReservation.Domain.Entity;
-using HotelReservation.Infrastructure.Persistence.EFCore.Mapping;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Infrastructure.Persistence.EFCore.Context
+﻿namespace HotelReservation.Infrastructure.Persistence.EFCore.Context
 {
     public class HotelReservationAPIContext:DbContext
     {

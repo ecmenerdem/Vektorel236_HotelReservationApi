@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
-{ 
+{
     /// <inheritdoc />
     public partial class M1 : Migration
     {

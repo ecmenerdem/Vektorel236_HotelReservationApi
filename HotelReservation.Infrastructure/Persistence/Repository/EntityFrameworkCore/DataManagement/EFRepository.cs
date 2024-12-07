@@ -1,15 +1,4 @@
-﻿using HotelReservation.Domain.Entity;
-using HotelReservation.Domain.Entity.Base;
-using HotelReservation.Domain.Repository.DataManagement;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement
+﻿namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement
 {
     public class EFRepository<T> : IRepository<T> where T : AuditableEntity
     {

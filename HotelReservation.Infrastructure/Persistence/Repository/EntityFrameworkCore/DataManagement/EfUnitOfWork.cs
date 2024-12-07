@@ -1,14 +1,4 @@
-﻿using HotelReservation.Domain.Entity.Base;
-using HotelReservation.Domain.Repository;
-using HotelReservation.Domain.Repository.DataManagement;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement
+﻿namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement
 {
     public class EfUnitOfWork : IUnitOfWork
     {

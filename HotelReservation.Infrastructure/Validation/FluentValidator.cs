@@ -1,12 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using HotelReservation.Application.Contracts.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace HotelReservation.Infrastructure.Validation
 {
     public class FluentValidator : IGenericValidator

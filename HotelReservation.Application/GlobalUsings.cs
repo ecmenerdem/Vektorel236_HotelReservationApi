@@ -1,0 +1,11 @@
+﻿global using HotelReservation.Application.Contracts.Persistence;
+global using HotelReservation.Application.Contracts.Validation;
+global using HotelReservation.Application.DTO.User.Login;
+global using HotelReservation.Application.DTO.User.Registration;
+global using HotelReservation.Application.UseCases.AppUser.Validation;
+global using HotelReservation.Domain.Entity;
+global using HotelReservation.Domain.Exceptions;
+global using HotelReservation.Domain.Repository.DataManagement;
+global using System.Linq.Expressions;
+global using System.Text.Json.Serialization;
+global using FluentValidation;

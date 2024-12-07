@@ -1,14 +1,4 @@
-﻿using HotelReservation.Domain.Entity;
-using HotelReservation.Infrastructure.Persistence.EFCore.Mapping.Base;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Infrastructure.Persistence.EFCore.Mapping
+﻿namespace HotelReservation.Infrastructure.Persistence.EFCore.Mapping
 {
     public class UserMap : BaseMap<User>
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Application.Contracts.Validation
+﻿namespace HotelReservation.Application.Contracts.Validation
 {
     public interface IGenericValidator
     {

@@ -1,13 +1,4 @@
-﻿using HotelReservation.Application.DTO.User.Login;
-using HotelReservation.Application.DTO.User.Registration;
-using HotelReservation.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Application.Contracts.Persistence
+﻿namespace HotelReservation.Application.Contracts.Persistence
 {
     public interface IUserService
     {

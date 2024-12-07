@@ -1,12 +1,4 @@
-﻿using HotelReservation.Domain.Entity.Base;
-using HotelReservation.Domain.Repository.DataManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Infrastructure.Persistence.Repository.Dapper
+﻿namespace HotelReservation.Infrastructure.Persistence.Repository.Dapper
 {
     public class DapperRepository<T> : IRepository<T> where T : AuditableEntity
     {

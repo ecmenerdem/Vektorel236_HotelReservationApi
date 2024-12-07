@@ -1,14 +1,4 @@
-﻿using HotelReservation.Domain.Entity;
-using HotelReservation.Domain.Entity.Base;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Infrastructure.Persistence.EFCore.Mapping.Base
+﻿namespace HotelReservation.Infrastructure.Persistence.EFCore.Mapping.Base
 {
     public class BaseMap<T> : IEntityTypeConfiguration<T> where T : AuditableEntity
     {
