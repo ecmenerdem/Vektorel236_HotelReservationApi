@@ -1,4 +1,5 @@
-﻿namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore
+﻿
+namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore
 {
     public class EfUserRepository : EFRepository<User>,IUserRepository
     {
@@ -8,9 +9,17 @@
             _dbContext = dbContext;
         }
 
+        public async Task<IEnumerable<User>> GetDeletedUsers()
+        {
+            return await _dbContext.Set<User>().IgnoreQueryFilters().Where(q=>q.IsDeleted==true).ToListAsync();
+        }
+
         public async Task<User> LoginAsync(User user)
         {
             return await _dbContext.Set<User>().SingleOrDefaultAsync(q => q.Username == user.Username && q.Password == user.Password);
         }
+
+       
+
     }
 }

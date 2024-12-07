@@ -1,10 +1,12 @@
-﻿namespace HotelReservation.Application.Contracts.Persistence
+﻿using HotelReservation.Application.DTO.User;
+
+namespace HotelReservation.Application.Contracts.Persistence
 {
     public interface IUserService
     {
-        Task<User> GetUserByID(int id);
-        Task<User> GetUserByEmail(string email);
-        Task<User> GetUserByUsername(string userName);
+        Task<UserDTO> GetUserByID(int id);
+        Task<UserDTO> GetUserByEmail(string email);
+        Task<UserDTO> GetUserByUsername(string userName);
         Task<User> GetUserByGuid(string email);
         Task<IEnumerable<User>> GetAllUsers();
         Task<bool> UpdateUser(User user);

@@ -1,29 +1,25 @@
-﻿namespace HotelReservation.Application.UseCases.AppUser
+﻿using AutoMapper;
+using HotelReservation.Application.DTO.User;
+
+namespace HotelReservation.Application.UseCases.AppUser
 {
     public class UserManager : IUserService
     {
         private readonly IUnitOfWork _uow;
         private readonly IGenericValidator _genericValidator;
+        private readonly IMapper _mapper;
 
-        public UserManager(IUnitOfWork uow, IGenericValidator genericValidator)
+        public UserManager(IUnitOfWork uow, IGenericValidator genericValidator, IMapper mapper)
         {
             _uow = uow;
             _genericValidator = genericValidator;
+            _mapper = mapper;
         }
 
         public async Task<User> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
         {
 
             await _genericValidator.ValidateAsync(userRegistrationRequestDTO, typeof(UserRegistrationValidator));
-
-
-
-
-
-
-
-
-
 
 
             /*Bu if kullanıcı adı daha önce kayıtlı mı? diye kontrol ediyor*/
@@ -63,18 +59,22 @@
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            throw new NotImplementedException();
+           return await _uow.UserRepository.GetAllAsync();
 
         }
 
-        public Task<IEnumerable<User>> GetDeletedUsers()
+        public async Task<IEnumerable<User>> GetDeletedUsers()
         {
-            throw new NotImplementedException();
+            return await _uow.UserRepository.GetDeletedUsers();
         }
 
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<UserDTO> GetUserByEmail(string email)
         {
-            return await _uow.UserRepository.GetAsync(q => q.Email == email);
+            var user =  await _uow.UserRepository.GetAsync(q => q.Email == email);
+
+            UserDTO userDTO = _mapper.Map<UserDTO>(user);
+
+            return userDTO;
         }
 
         public Task<User> GetUserByGuid(string email)
@@ -82,14 +82,18 @@
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUserByID(int id)
+        public Task<UserDTO> GetUserByID(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User> GetUserByUsername(string userName)
+        public async Task<UserDTO> GetUserByUsername(string userName)
         {
-            return await _uow.UserRepository.GetAsync(q => q.Username == userName);
+            var user =  await _uow.UserRepository.GetAsync(q => q.Username == userName);
+
+            UserDTO userDTO = _mapper.Map<UserDTO>(user);
+
+            return userDTO;
         }
 
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
@@ -124,12 +128,7 @@
 
             var loginUser = await _uow.UserRepository.LoginAsync(user);
 
-            LoginResponseDTO loginResponseDTO = new()
-            {
-                Ad = loginUser.FirstName,
-                Soyad = loginUser.LastName,
-                KullaniciAdi = loginUser.Username,
-            };
+            LoginResponseDTO loginResponseDTO = _mapper.Map<LoginResponseDTO>(loginUser);
 
             if (loginUser is null)
             {
