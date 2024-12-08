@@ -37,5 +37,24 @@ namespace HotelReservation.API.Controllers
 
 
         }
+
+
+
+        [HttpGet("GetByDay/{day}")]
+        public WeatherForecast GetByDay(int day)
+        {
+            _logger.Log(LogLevel.Information, "Günlük Sýcaklý Çekildi");
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray().Where(q=>q.Date.Day==day).SingleOrDefault();
+
+
+
+
+        }
     }
 }

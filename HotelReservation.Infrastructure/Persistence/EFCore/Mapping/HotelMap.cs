@@ -11,7 +11,6 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Mapping
 
             builder.ToTable("Hotel");
 
-            builder.HasQueryFilter(q=>q.IsDeleted==false);
 
             builder.HasMany(q=>q.Rooms).WithOne(q=>q.Hotel)
                 .HasForeignKey(q=>q.HotelID)

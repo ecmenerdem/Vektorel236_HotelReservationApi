@@ -9,3 +9,5 @@ global using HotelReservation.Domain.Repository.DataManagement;
 global using System.Linq.Expressions;
 global using System.Text.Json.Serialization;
 global using FluentValidation;
+global using AutoMapper;
+global using HotelReservation.Application.DTO.User;

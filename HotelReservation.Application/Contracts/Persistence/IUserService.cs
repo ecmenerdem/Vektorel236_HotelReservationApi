@@ -1,4 +1,5 @@
 ﻿using HotelReservation.Application.DTO.User;
+using HotelReservation.Application.DTO.User.Update;
 
 namespace HotelReservation.Application.Contracts.Persistence
 {
@@ -7,12 +8,12 @@ namespace HotelReservation.Application.Contracts.Persistence
         Task<UserDTO> GetUserByID(int id);
         Task<UserDTO> GetUserByEmail(string email);
         Task<UserDTO> GetUserByUsername(string userName);
-        Task<User> GetUserByGuid(string email);
-        Task<IEnumerable<User>> GetAllUsers();
-        Task<bool> UpdateUser(User user);
+        Task<UserDTO> GetUserByGuid(Guid guid);
+        Task<IEnumerable<UserDTO>> GetAllUsers();
+        Task<bool> UpdateUser(UserUpdateRequestDTO userUpdateDTO);
         Task<bool> DeleteUser(int id);
-        Task<User> AddUser(UserRegistrationRequestDTO user);
-        Task<IEnumerable<User>> GetDeletedUsers();
+        Task<UserDTO> AddUser(UserRegistrationRequestDTO user);
+        Task<IEnumerable<UserDTO>> GetDeletedUsers();
         Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO);
 
 

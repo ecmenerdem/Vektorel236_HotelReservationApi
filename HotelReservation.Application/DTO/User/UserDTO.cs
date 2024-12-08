@@ -8,9 +8,9 @@ namespace HotelReservation.Application.DTO.User
 {
     public class UserDTO
     {
+        public Guid Guid { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
         [JsonIgnore(Condition =JsonIgnoreCondition.WhenWritingNull)]
         public string Username { get; set; }
         public string Email { get; set; }

@@ -11,6 +11,9 @@
 
             builder.Property(q => q.IsActive).HasDefaultValue(true);
             builder.Property(q => q.IsDeleted).HasDefaultValue(false);
+
+            builder.HasQueryFilter(q => q.IsDeleted == false);
+
         }
     }
 }

@@ -7,7 +7,6 @@
         {
             base.Configure(builder);
 
-            builder.HasQueryFilter(q => q.IsDeleted == false);
 
             builder.ToTable("User");
             builder.Property(q => q.FirstName).IsRequired().HasMaxLength(100);

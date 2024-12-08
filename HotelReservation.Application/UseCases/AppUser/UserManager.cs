@@ -1,25 +1,24 @@
-﻿using AutoMapper;
-using HotelReservation.Application.DTO.User;
+﻿using HotelReservation.Application.DTO.User.Update;
 
 namespace HotelReservation.Application.UseCases.AppUser
 {
     public class UserManager : IUserService
     {
         private readonly IUnitOfWork _uow;
-        private readonly IGenericValidator _genericValidator;
+        private readonly IGenericValidator _validator;
         private readonly IMapper _mapper;
 
-        public UserManager(IUnitOfWork uow, IGenericValidator genericValidator, IMapper mapper)
+        public UserManager(IUnitOfWork uow, IGenericValidator validator, IMapper mapper)
         {
             _uow = uow;
-            _genericValidator = genericValidator;
+            _validator = validator;
             _mapper = mapper;
         }
 
-        public async Task<User> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
+        public async Task<UserDTO> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
         {
 
-            await _genericValidator.ValidateAsync(userRegistrationRequestDTO, typeof(UserRegistrationValidator));
+            await _validator.ValidateAsync(userRegistrationRequestDTO, typeof(UserRegistrationValidator));
 
 
             /*Bu if kullanıcı adı daha önce kayıtlı mı? diye kontrol ediyor*/
@@ -34,21 +33,10 @@ namespace HotelReservation.Application.UseCases.AppUser
             {
                 throw new InvalidEMailException();
             }
-
-            User user = new User()
-            {
-                FirstName = userRegistrationRequestDTO.Ad,
-                LastName = userRegistrationRequestDTO.Soyad,
-                Username = userRegistrationRequestDTO.KullaniciAdi,
-                Password = userRegistrationRequestDTO.Sifre,
-                PhoneNumber = userRegistrationRequestDTO.TelNo,
-                Email = userRegistrationRequestDTO.EPosta
-            };
-
-
+            User user = _mapper.Map<User>(userRegistrationRequestDTO);
             await _uow.UserRepository.AddAsync(user);
             await _uow.SaveChangeAsync();
-            return user;
+            return _mapper.Map<UserDTO>(user);
 
         }
 
@@ -57,15 +45,28 @@ namespace HotelReservation.Application.UseCases.AppUser
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<UserDTO>> GetAllUsers()
         {
-           return await _uow.UserRepository.GetAllAsync();
+            var users = await _uow.UserRepository.GetAllAsync();
+
+            //List<UserDTO> userDTOList = new List<UserDTO>();
+
+            //foreach (var user in users) {
+
+            //    userDTOList.Add(_mapper.Map<UserDTO>(user));
+            //}
+            //return userDTOList;
+
+
+            return users.Select(user=>_mapper.Map<UserDTO>(user)).ToList();
 
         }
 
-        public async Task<IEnumerable<User>> GetDeletedUsers()
+        public async Task<IEnumerable<UserDTO>> GetDeletedUsers()
         {
-            return await _uow.UserRepository.GetDeletedUsers();
+            var users = await _uow.UserRepository.GetDeletedUsers();
+
+            return users.Select(user => _mapper.Map<UserDTO>(user));
         }
 
         public async Task<UserDTO> GetUserByEmail(string email)
@@ -77,9 +78,9 @@ namespace HotelReservation.Application.UseCases.AppUser
             return userDTO;
         }
 
-        public Task<User> GetUserByGuid(string email)
+        public async Task<UserDTO> GetUserByGuid(Guid guid)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<UserDTO>(await _uow.UserRepository.GetAsync(q => q.GUID == guid));
         }
 
         public Task<UserDTO> GetUserByID(int id)
@@ -100,7 +101,7 @@ namespace HotelReservation.Application.UseCases.AppUser
         {
 
 
-            await _genericValidator.ValidateAsync(loginRequestDTO, typeof(LoginValidator));
+            await _validator.ValidateAsync(loginRequestDTO, typeof(LoginValidator));
 
             //LoginValidator loginValidator = new LoginValidator();
 
@@ -138,9 +139,17 @@ namespace HotelReservation.Application.UseCases.AppUser
             return loginResponseDTO;
         }
 
-        public async Task<bool> UpdateUser(User user)
+        public async Task<bool> UpdateUser(UserUpdateRequestDTO userUpdateDTO)
         {
-            throw new NotImplementedException();
+            await _validator.ValidateAsync(userUpdateDTO, typeof(UserUpdateValidator));
+
+            var existUser = await _uow.UserRepository.GetAsync(q => q.GUID == userUpdateDTO.Guid);
+            if (existUser is not null)
+            {
+                existUser = _mapper.Map<User>(userUpdateDTO);
+            }
+            _uow.UserRepository.Update(existUser);
+            return true;
         }
     }
 }
