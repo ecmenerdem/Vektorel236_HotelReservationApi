@@ -23,6 +23,7 @@ namespace HotelReservation.API
             builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
             builder.Services.AddScoped<IUserService,UserManager>();
 
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

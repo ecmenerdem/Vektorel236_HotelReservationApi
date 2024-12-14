@@ -1,10 +1,12 @@
-﻿namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement
+﻿using HotelReservation.Infrastructure.Persistence.EFCore.Context;
+
+namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement
 {
     public class EfUnitOfWork : IUnitOfWork
     {
-        private readonly DbContext _dbContext;
+        private readonly HotelReservationAPIContext _dbContext;
 
-        public EfUnitOfWork(DbContext dbContext)
+        public EfUnitOfWork(HotelReservationAPIContext dbContext)
         {
             _dbContext = dbContext;
             UserRepository = new EfUserRepository(_dbContext);
