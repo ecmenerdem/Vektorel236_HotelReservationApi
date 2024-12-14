@@ -1,5 +1,4 @@
-﻿using HotelReservation.Application.DTO.User;
-using HotelReservation.Application.DTO.User.Update;
+﻿
 
 namespace HotelReservation.Application.Contracts.Persistence
 {

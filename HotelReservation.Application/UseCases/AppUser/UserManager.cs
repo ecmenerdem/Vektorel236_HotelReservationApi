@@ -1,6 +1,4 @@
-﻿using HotelReservation.Application.DTO.User.Update;
-
-namespace HotelReservation.Application.UseCases.AppUser
+﻿namespace HotelReservation.Application.UseCases.AppUser
 {
     public class UserManager : IUserService
     {
