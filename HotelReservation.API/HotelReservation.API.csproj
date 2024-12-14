@@ -13,10 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HotelReservation.Application\HotelReservation.Application.csproj" />
     <ProjectReference Include="..\HotelReservation.Domain\HotelReservation.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\HotelReservation.Infrastructure\HotelReservation.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
