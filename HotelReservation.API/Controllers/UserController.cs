@@ -23,7 +23,7 @@ namespace HotelReservation.API.Controllers
         {
             var users = await _userService.GetAllUsers();
 
-            return Ok(users);
+            return StatusCode((int)users.StatusCode, users);
         }
 
 

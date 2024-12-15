@@ -1,4 +1,7 @@
-﻿namespace HotelReservation.Application.UseCases.AppUser
+﻿using HotelReservation.Application.Result;
+using System.Net;
+
+namespace HotelReservation.Application.UseCases.AppUser
 {
     public class UserManager : IUserService
     {
@@ -13,7 +16,7 @@
             _mapper = mapper;
         }
 
-        public async Task<UserDTO> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
+        public async Task<ApiResult<UserDTO>> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
         {
 
             await _validator.ValidateAsync(userRegistrationRequestDTO, typeof(UserRegistrationValidator));
@@ -34,7 +37,8 @@
             User user = _mapper.Map<User>(userRegistrationRequestDTO);
             await _uow.UserRepository.AddAsync(user);
             await _uow.SaveChangeAsync();
-            return _mapper.Map<UserDTO>(user);
+
+            return ApiResult<UserDTO>.SuccesResult(_mapper.Map<UserDTO>(user),"Kullanıcı Oluşturuldu");
 
         }
 
@@ -43,7 +47,7 @@
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllUsers()
+        public async Task<ApiResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
             var users = await _uow.UserRepository.GetAllAsync();
 
@@ -55,8 +59,14 @@
             //}
             //return userDTOList;
 
+            var userDTOList = users.Select(user => _mapper.Map<UserDTO>(user)).ToList();
 
-            return users.Select(user=>_mapper.Map<UserDTO>(user)).ToList();
+            if (userDTOList.Any())
+            {
+                return ApiResult<IEnumerable<UserDTO>>.SuccesResult(userDTOList);
+            }
+
+            return ApiResult<IEnumerable<UserDTO>>.SuccesResult(userDTOList, "Kullanıcılar Bulunamadı", HttpStatusCode.NotFound);
 
         }
 
