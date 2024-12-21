@@ -1,5 +1,8 @@
-﻿using HotelReservation.Application.Result;
+﻿using HotelReservation.Application.Contracts.Security;
+using HotelReservation.Application.Result;
 using System.Net;
+using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HotelReservation.Application.UseCases.AppUser
 {
@@ -8,12 +11,14 @@ namespace HotelReservation.Application.UseCases.AppUser
         private readonly IUnitOfWork _uow;
         private readonly IGenericValidator _validator;
         private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public UserManager(IUnitOfWork uow, IGenericValidator validator, IMapper mapper)
+        public UserManager(IUnitOfWork uow, IGenericValidator validator, IMapper mapper, ITokenService tokenService)
         {
             _uow = uow;
             _validator = validator;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         public async Task<ApiResult<UserDTO>> AddUser(UserRegistrationRequestDTO userRegistrationRequestDTO)
@@ -38,13 +43,28 @@ namespace HotelReservation.Application.UseCases.AppUser
             await _uow.UserRepository.AddAsync(user);
             await _uow.SaveChangeAsync();
 
-            return ApiResult<UserDTO>.SuccesResult(_mapper.Map<UserDTO>(user),"Kullanıcı Oluşturuldu");
+            return ApiResult<UserDTO>.SuccesResult(_mapper.Map<UserDTO>(user),HttpStatusCode.OK,"Kullanıcı Oluşturuldu");
 
         }
 
-        public Task<bool> DeleteUser(int id)
+        public async Task<ApiResult<bool>> DeleteUser(Guid guid)
         {
-            throw new NotImplementedException();
+            var user = await _uow.UserRepository.GetAsync(q => q.GUID == guid);
+
+            if (user == null) {
+                var error = new ErrorResult(new List<string> { "Kullanıcı Bulunamadı" });
+
+                return ApiResult<bool>.FailureResult(error,HttpStatusCode.NotFound);
+
+            }
+
+            user.IsActive = false;
+            user.IsDeleted = true;
+            _uow.UserRepository.Update(user);
+            await _uow.SaveChangeAsync();
+
+            return ApiResult<bool>.SuccesResult(true,HttpStatusCode.OK);
+
         }
 
         public async Task<ApiResult<IEnumerable<UserDTO>>> GetAllUsers()
@@ -66,7 +86,7 @@ namespace HotelReservation.Application.UseCases.AppUser
                 return ApiResult<IEnumerable<UserDTO>>.SuccesResult(userDTOList);
             }
 
-            return ApiResult<IEnumerable<UserDTO>>.SuccesResult(userDTOList, "Kullanıcılar Bulunamadı", HttpStatusCode.NotFound);
+            return ApiResult<IEnumerable<UserDTO>>.SuccesResult(userDTOList, HttpStatusCode.NotFound, "Kullanıcılar Bulunamadı" );
 
         }
 
@@ -86,9 +106,19 @@ namespace HotelReservation.Application.UseCases.AppUser
             return userDTO;
         }
 
-        public async Task<UserDTO> GetUserByGuid(Guid guid)
+        public async Task<ApiResult<UserDTO>> GetUserByGuid(Guid guid)
         {
-            return _mapper.Map<UserDTO>(await _uow.UserRepository.GetAsync(q => q.GUID == guid));
+            var user = await _uow.UserRepository.GetAsync(q => q.GUID == guid);
+
+            if (user is null)
+            {
+                var error = new ErrorResult(new List<string> { "Kullanıcı Bulunamadı" });
+
+                return ApiResult<UserDTO>.FailureResult(error, HttpStatusCode.NotFound);
+
+            }
+
+            return ApiResult<UserDTO>.SuccesResult(_mapper.Map<UserDTO>(user), HttpStatusCode.OK);
         }
 
         public Task<UserDTO> GetUserByID(int id)
@@ -105,10 +135,8 @@ namespace HotelReservation.Application.UseCases.AppUser
             return userDTO;
         }
 
-        public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
+        public async Task<ApiResult<LoginResponseDTO>> LoginAsync(LoginRequestDTO loginRequestDTO)
         {
-
-
             await _validator.ValidateAsync(loginRequestDTO, typeof(LoginValidator));
 
             //LoginValidator loginValidator = new LoginValidator();
@@ -136,15 +164,29 @@ namespace HotelReservation.Application.UseCases.AppUser
             user.Password = loginRequestDTO.Sifre;
 
             var loginUser = await _uow.UserRepository.LoginAsync(user);
-
-            LoginResponseDTO loginResponseDTO = _mapper.Map<LoginResponseDTO>(loginUser);
-
             if (loginUser is null)
             {
-                throw new InvalidUserCridentialsException();
+                var error = new ErrorResult(new List<string> { "Kullanıcı Adı Veya Şifre Yanlış" });
+
+                return ApiResult<LoginResponseDTO>.FailureResult(error, HttpStatusCode.Unauthorized);
+
+                //throw new InvalidUserCridentialsException();
             }
 
-            return loginResponseDTO;
+            var claims = new List<Claim>
+            {
+                new Claim("KullaniciGUID",loginUser.GUID.ToString()),
+                new Claim("KullaniciAdi",loginUser.Username),
+                new Claim("AdSoyad",loginUser.FullName),
+                new Claim("EMail",loginUser.Email),
+                new Claim("Phone",loginUser.PhoneNumber)
+
+            };
+
+            var token = _tokenService.GenerateToken(claims);
+            var loginUserDTO = _mapper.Map<LoginResponseDTO>(loginUser);
+            loginUserDTO.Token=token;
+            return ApiResult<LoginResponseDTO>.SuccesResult(loginUserDTO);
         }
 
         public async Task<bool> UpdateUser(UserUpdateRequestDTO userUpdateDTO)

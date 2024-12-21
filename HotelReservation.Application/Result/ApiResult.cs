@@ -20,23 +20,25 @@ namespace HotelReservation.Application.Result
             StatusCode = statusCode;
         }
 
-        public ApiResult(bool success, string message, T data, ErrorResult error)
+        public ApiResult(bool success, string message, T data, ErrorResult error, HttpStatusCode statusCode)
         {
             Success = success;
             Message = message;
             Data = data;
             Error = error;
+            StatusCode = statusCode;
         }
 
-        public static ApiResult<T> SuccesResult(T data, string message = "İşlem Başarılı", HttpStatusCode statusCode = HttpStatusCode.OK)
+        public static ApiResult<T> SuccesResult(T data, HttpStatusCode statusCode = HttpStatusCode.OK, string message = "İşlem Başarılı")
         {
             return new ApiResult<T>(true, message, data, statusCode);
         }
 
-        public static ApiResult<T>FailureResult(ErrorResult error, string message="İşlem Başarısız", HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+        public static ApiResult<T>FailureResult(ErrorResult error, HttpStatusCode statusCode = HttpStatusCode.InternalServerError, string message="İşlem Başarısız")
         {
-            return new ApiResult<T>(false, message, default, error);
+            return new ApiResult<T>(false, message, default,error,statusCode);
         }
+         
 
     }
 }

@@ -1,12 +1,14 @@
 
 using AutoMapper;
 using HotelReservation.Application.Contracts.Persistence;
+using HotelReservation.Application.Contracts.Security;
 using HotelReservation.Application.Contracts.Validation;
 using HotelReservation.Application.UseCases.AppUser;
 using HotelReservation.Application.UseCases.AppUser.Mapping;
 using HotelReservation.Domain.Repository.DataManagement;
 using HotelReservation.Infrastructure.Persistence.EFCore.Context;
 using HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement;
+using HotelReservation.Infrastructure.Security;
 using HotelReservation.Infrastructure.Validation;
 
 namespace HotelReservation.API
@@ -31,6 +33,8 @@ namespace HotelReservation.API
             builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
             builder.Services.AddScoped<IUserService,UserManager>();
             builder.Services.AddScoped<IGenericValidator,FluentValidator>();
+            
+            builder.Services.AddScoped<ITokenService,TokenService>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -9,13 +9,13 @@ namespace HotelReservation.Application.Contracts.Persistence
         Task<UserDTO> GetUserByID(int id);
         Task<UserDTO> GetUserByEmail(string email);
         Task<UserDTO> GetUserByUsername(string userName);
-        Task<UserDTO> GetUserByGuid(Guid guid);
+        Task<ApiResult<UserDTO>> GetUserByGuid(Guid guid);
         Task<ApiResult<IEnumerable<UserDTO>>> GetAllUsers();
         Task<bool> UpdateUser(UserUpdateRequestDTO userUpdateDTO);
-        Task<bool> DeleteUser(int id);
+        Task<ApiResult<bool>> DeleteUser(Guid guid);
         Task<ApiResult<UserDTO>> AddUser(UserRegistrationRequestDTO user);
         Task<IEnumerable<UserDTO>> GetDeletedUsers();
-        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO);
+        Task<ApiResult<LoginResponseDTO>> LoginAsync(LoginRequestDTO loginRequestDTO);
 
 
     }
