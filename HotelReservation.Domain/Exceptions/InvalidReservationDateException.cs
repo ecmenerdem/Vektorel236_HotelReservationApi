@@ -12,5 +12,5 @@ namespace HotelReservation.Domain.Exceptions
         {
             
         }
-    }
+    } 
 }

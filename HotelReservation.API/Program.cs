@@ -1,5 +1,7 @@
 
 using AutoMapper;
+using HotelReservation.API.Common;
+using HotelReservation.API.Middleware;
 using HotelReservation.Application.Contracts.Persistence;
 using HotelReservation.Application.Contracts.Security;
 using HotelReservation.Application.Contracts.Validation;
@@ -35,19 +37,22 @@ namespace HotelReservation.API
             builder.Services.AddScoped<IGenericValidator,FluentValidator>();
             
             builder.Services.AddScoped<ITokenService,TokenService>();
+            builder.Services.Configure<JWTExceptURLList>(builder.Configuration.GetSection(nameof(JWTExceptURLList)));
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 
             var app = builder.Build();
-
+            app.UseGlobalExceptionHandlerMiddleware();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseApiAuthorizationMiddleware();
 
             app.UseAuthorization();
 

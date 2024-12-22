@@ -18,19 +18,17 @@ namespace HotelReservation.API.Controllers
     public class UserController : Controller/*Controller*/
     {
         private readonly IUserService _userService;
-        private readonly IConfiguration _configuration;
 
-        public UserController(IUserService userService, IConfiguration configuration)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _configuration = configuration;
+          
         }
 
         [HttpGet("/Users")]
         [ProducesResponseType(typeof(ApiResult<List<UserDTO>>),StatusCodes.Status200OK)]
         public async Task<IActionResult>GetAllUsers()/*Action*/
         {
-
             var users = await _userService.GetAllUsers();
 
             return StatusCode((int)users.StatusCode, users);
@@ -62,40 +60,6 @@ namespace HotelReservation.API.Controllers
         [ProducesResponseType(typeof(ApiResult<UserDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUser(Guid userGUID)
         {
-            var jwtHandler = new JwtSecurityTokenHandler();
-
-            string authHeader = HttpContext.Request.Headers["Authorization"];
-
-            if (!string.IsNullOrEmpty(authHeader))
-            {
-                var token = authHeader.Replace("Bearer ", "");
-
-                var key = Encoding.UTF8.GetBytes(_configuration["AppSettings:JWTKey"]) ?? throw new ArgumentNullException("Key Bilgisi Gelmedi");
-
-                jwtHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                }, out SecurityToken validatedToken);
-
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-
-                if (jwtToken.ValidTo < DateTime.Now)
-                {
-                    throw new SecurityTokenException("Token Tarihi Geçersiz");
-                }
-            }
-
-            else
-            {
-                throw new Exception("Token Bilgisi Gelmedi");
-            }
-
-
-
             var result =  await _userService.GetUserByGuid(userGUID);
 
             return StatusCode((int)result.StatusCode, result);

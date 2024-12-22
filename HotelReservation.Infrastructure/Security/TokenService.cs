@@ -28,7 +28,7 @@ namespace HotelReservation.Infrastructure.Security
                 expires:DateTime.Now.AddDays(30),
                 claims:claims,
                 issuer:"http://asdasd.com",
-                signingCredentials:new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha512Signature));
+                signingCredentials:new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature));
 
 
             var tokenHandler = new JwtSecurityTokenHandler();

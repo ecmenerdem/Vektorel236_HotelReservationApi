@@ -52,9 +52,12 @@ namespace HotelReservation.Application.UseCases.AppUser
             var user = await _uow.UserRepository.GetAsync(q => q.GUID == guid);
 
             if (user == null) {
-                var error = new ErrorResult(new List<string> { "Kullanıcı Bulunamadı" });
+                //var error = new ErrorResult(new List<string> { "Kullanıcı Bulunamadı" });
 
-                return ApiResult<bool>.FailureResult(error,HttpStatusCode.NotFound);
+                //return ApiResult<bool>.FailureResult(error,HttpStatusCode.NotFound);
+
+
+                throw new UserNotFoundException();
 
             }
 
@@ -112,9 +115,10 @@ namespace HotelReservation.Application.UseCases.AppUser
 
             if (user is null)
             {
-                var error = new ErrorResult(new List<string> { "Kullanıcı Bulunamadı" });
+                //var error = new ErrorResult(new List<string> { "Kullanıcı Bulunamadı" });
 
-                return ApiResult<UserDTO>.FailureResult(error, HttpStatusCode.NotFound);
+                //return ApiResult<UserDTO>.FailureResult(error, HttpStatusCode.NotFound);
+                throw new UserNotFoundException();
 
             }
 
@@ -157,8 +161,6 @@ namespace HotelReservation.Application.UseCases.AppUser
             //}
 
 
-
-
             User user = new User();
             user.Username = loginRequestDTO.KullaniciAdi;
             user.Password = loginRequestDTO.Sifre;
@@ -166,11 +168,7 @@ namespace HotelReservation.Application.UseCases.AppUser
             var loginUser = await _uow.UserRepository.LoginAsync(user);
             if (loginUser is null)
             {
-                var error = new ErrorResult(new List<string> { "Kullanıcı Adı Veya Şifre Yanlış" });
-
-                return ApiResult<LoginResponseDTO>.FailureResult(error, HttpStatusCode.Unauthorized);
-
-                //throw new InvalidUserCridentialsException();
+                throw new InvalidUserCridentialsException();
             }
 
             var claims = new List<Claim>

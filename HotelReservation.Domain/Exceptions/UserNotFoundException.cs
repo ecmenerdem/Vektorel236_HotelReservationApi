@@ -13,6 +13,10 @@ namespace HotelReservation.Domain.Exceptions
         {
             
         }
+        public UserNotFoundException():base($"Kullanıcı bulunamadı.")
+        {
+            
+        }
 
         public UserNotFoundException(int id):base($"ID si {id} olan kullanıcı bulunamadı.")
         {
