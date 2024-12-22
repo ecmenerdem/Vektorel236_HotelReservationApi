@@ -1,5 +1,6 @@
 ﻿using HotelReservation.Application.Contracts.Security;
 using HotelReservation.Application.Result;
+using HotelReservation.Domain.Exceptions.User;
 using System.Net;
 using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -37,7 +38,7 @@ namespace HotelReservation.Application.UseCases.AppUser
             /*Bu if e-posta daha önce kayıtlı mı? diye kontrol ediyorr*/
             if (await GetUserByEmail(userRegistrationRequestDTO.EPosta) is not null)
             {
-                throw new InvalidEMailException();
+                throw new InvalidUserEMailException();
             }
             User user = _mapper.Map<User>(userRegistrationRequestDTO);
             await _uow.UserRepository.AddAsync(user);

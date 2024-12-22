@@ -1,5 +1,5 @@
 ﻿using HotelReservation.Application.Result;
-using HotelReservation.Domain.Exceptions;
+using HotelReservation.Domain.Exceptions.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
@@ -29,57 +29,28 @@ namespace HotelReservation.API.Middleware
             {
                 List<string> errors = new() { ex.Message };
 
+                httpContext.Response.ContentType = "application/json";
+
                 if (ex.GetType()==(typeof(FluentValidation.ValidationException)))
                 {
                     var validationException = ex as FluentValidation.ValidationException;
 
-                    var validationErrors = validationException.Errors.Select(x => x.ErrorMessage).ToList();
+                    httpContext.Response.StatusCode =httpContext.Response.StatusCode=(int)HttpStatusCode.BadRequest;
 
-                    ErrorResult errorResult = new ErrorResult(validationErrors);
+                    errors = validationException.Errors.Select(x => x.ErrorMessage).ToList();
 
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-                    httpContext.Response.ContentType = "application/json";
-
-                   await httpContext.Response.WriteAsJsonAsync(ApiResult<bool>.FailureResult(errorResult,HttpStatusCode.BadRequest),new JsonSerializerOptions() { PropertyNamingPolicy=null});
-
-
-                }
-
-                else if (ex.GetType()==typeof(InvalidUserCridentialsException))
-                {
-                    
-                    ErrorResult errorResult = new ErrorResult(errors);
-
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-
-                    httpContext.Response.ContentType = "application/json";
-
-                    await httpContext.Response.WriteAsJsonAsync(ApiResult<bool>.FailureResult(errorResult, HttpStatusCode.Unauthorized), new JsonSerializerOptions() { PropertyNamingPolicy = null });
-                }
-                else if (ex.GetType() == typeof(UserNotFoundException))
-                {
-
-                    ErrorResult errorResult = new ErrorResult(errors);
-
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-
-                    httpContext.Response.ContentType = "application/json";
-
-                    await httpContext.Response.WriteAsJsonAsync(ApiResult<bool>.FailureResult(errorResult, HttpStatusCode.NotFound), new JsonSerializerOptions() { PropertyNamingPolicy = null });
                 }
 
                 else
                 {
-                    ErrorResult errorResult = new ErrorResult(errors);
+                    httpContext.Response.StatusCode = ex.Data["StatusCode"] is not null ? (int)ex.Data["StatusCode"] : (int)HttpStatusCode.InternalServerError;
+                   
 
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-                    httpContext.Response.ContentType = "application/json";
-
-                    await httpContext.Response.WriteAsJsonAsync(ApiResult<bool>.FailureResult(errorResult, HttpStatusCode.InternalServerError), new JsonSerializerOptions() { PropertyNamingPolicy = null });
                 }
-               
+
+
+                ErrorResult errorResult = new ErrorResult(errors);
+                await httpContext.Response.WriteAsJsonAsync(ApiResult<bool>.FailureResult(errorResult), new JsonSerializerOptions() { PropertyNamingPolicy = null });
             }
             
         }
