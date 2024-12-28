@@ -5,6 +5,7 @@ using HotelReservation.API.Middleware;
 using HotelReservation.Application.Contracts.Persistence;
 using HotelReservation.Application.Contracts.Security;
 using HotelReservation.Application.Contracts.Validation;
+using HotelReservation.Application.UseCases.AppHotel;
 using HotelReservation.Application.UseCases.AppUser;
 using HotelReservation.Application.UseCases.AppUser.Mapping;
 using HotelReservation.Domain.Repository.DataManagement;
@@ -34,6 +35,7 @@ namespace HotelReservation.API
             builder.Services.AddDbContext<HotelReservationAPIContext>();
             builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
             builder.Services.AddScoped<IUserService,UserManager>();
+            builder.Services.AddScoped<IHotelService,HotelManager>();
             builder.Services.AddScoped<IGenericValidator,FluentValidator>();
             
             builder.Services.AddScoped<ITokenService,TokenService>();

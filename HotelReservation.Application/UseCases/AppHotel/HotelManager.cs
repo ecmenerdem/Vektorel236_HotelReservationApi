@@ -58,19 +58,50 @@ namespace HotelReservation.Application.UseCases.AppHotel
             
         }
 
-        public Task<ApiResult<IEnumerable<HotelDTO>>> GetAllHotelsAsync()
+        public async Task<ApiResult<IEnumerable<HotelDTO>>> GetAllHotelsAsync()
         {
-            throw new NotImplementedException();
+            var hotels = await _uow.HotelRepository.GetAllAsync();
+
+            if (!hotels.Any())
+            {
+                var error = new ErrorResult(new List<string> { "Hiç Otel Bulunamadı" });
+                return ApiResult<IEnumerable<HotelDTO>>.FailureResult(error,HttpStatusCode.NotFound);
+            }
+
+            var hotelDTOList = _mapper.Map<IEnumerable<HotelDTO>>(hotels);
+
+            return ApiResult<IEnumerable<HotelDTO>>.SuccesResult(hotelDTOList);
+
         }
 
-        public Task<ApiResult<HotelDTO>> GetHotelByGUIDAsync(Guid guid)
+        public async Task<ApiResult<HotelDTO>> GetHotelByGUIDAsync(Guid guid)
         {
-            throw new NotImplementedException();
+            var hotel = await _uow.HotelRepository.GetAsync(q=>q.GUID==guid);
+
+            if (hotel is null)
+            {
+                var error = new ErrorResult(new List<string> { "Otel Bulunamadı" });
+                return ApiResult<HotelDTO>.FailureResult(error, HttpStatusCode.NotFound);
+            }
+
+            var hotelDTO = _mapper.Map<HotelDTO>(hotel);
+            return ApiResult<HotelDTO>.SuccesResult(hotelDTO);
         }
 
-        public Task<bool> UpdateHotel(HotelUpdateRequestDTO hotelUpdateRequestDTO)
+        public async Task<ApiResult<bool>> UpdateHotel(HotelUpdateRequestDTO hotelUpdateRequestDTO)
         {
-            throw new NotImplementedException();
+            await _validator.ValidateAsync(hotelUpdateRequestDTO,typeof(HotelUpdateValidator));
+
+            var hotel = await _uow.HotelRepository.GetAsync(q => q.GUID == hotelUpdateRequestDTO.Guid);
+
+            if (hotel is null) {
+                throw new HotelNotFoundException();
+            }
+
+            _mapper.Map(hotelUpdateRequestDTO, hotel);
+            await _uow.SaveChangeAsync();
+            return ApiResult<bool>.SuccesResult(true);
+
         }
     }
 }
