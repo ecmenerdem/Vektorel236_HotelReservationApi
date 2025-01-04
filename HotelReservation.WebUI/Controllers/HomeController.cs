@@ -17,11 +17,13 @@ namespace HotelReservation.WebUI.Controllers
         {
             return View();
         }
-
+        //[HttpGet("/Gizlilik")]
         public IActionResult Privacy()
         {
             return View();
         }
+
+       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
