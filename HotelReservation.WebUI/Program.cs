@@ -1,3 +1,5 @@
+using HotelReservation.WebHelper;
+
 namespace HotelReservation.WebUI
 {
     public class Program
@@ -8,8 +10,13 @@ namespace HotelReservation.WebUI
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
+            app.UseSession();
+            var httpContext  = app.Services.GetRequiredService<IHttpContextAccessor>();
+            AppHttpContext.Configure(httpContext);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
