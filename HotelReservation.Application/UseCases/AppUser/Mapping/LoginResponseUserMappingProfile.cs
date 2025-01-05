@@ -8,6 +8,8 @@
                .ForMember(dest => dest.Ad, opt => opt.MapFrom(src => src.FirstName))
                .ForMember(dest => dest.Soyad, opt => opt.MapFrom(src => src.LastName))
                .ForMember(dest => dest.KullaniciAdi, opt => opt.MapFrom(src => src.Username))
+               .ForMember(dest => dest.GrupAdi, opt => opt.MapFrom(src => src.Group.Name))
+               .ForMember(dest => dest.GrupID, opt => opt.MapFrom(src => src.GroupID))
              .ReverseMap();
         }
     }

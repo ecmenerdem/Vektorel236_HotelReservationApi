@@ -65,7 +65,7 @@ namespace HotelReservation.API.Controllers
             return StatusCode((int)result.StatusCode, result);
         } 
         
-        [HttpGet("/Login")]
+        [HttpPost("/Login")]
         [ProducesResponseType(typeof(ApiResult<LoginResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> LoginUser([FromBody]LoginRequestDTO loginRequest)
         {

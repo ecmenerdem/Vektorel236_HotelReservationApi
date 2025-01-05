@@ -16,6 +16,7 @@
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserGroup> UserGroup { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,6 +27,7 @@
             modelBuilder.ApplyConfiguration(new RoomMap());
             modelBuilder.ApplyConfiguration(new HotelMap());
             modelBuilder.ApplyConfiguration(new ReservationMap());
+            modelBuilder.ApplyConfiguration(new UserGroupMap());
         }
     }
 }

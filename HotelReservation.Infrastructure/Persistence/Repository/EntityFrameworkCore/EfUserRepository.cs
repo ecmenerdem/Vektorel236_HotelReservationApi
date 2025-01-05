@@ -16,7 +16,7 @@ namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFramework
 
         public async Task<User> LoginAsync(User user)
         {
-            return await _dbContext.Set<User>().SingleOrDefaultAsync(q => q.Username == user.Username && q.Password == user.Password);
+            return await _dbContext.Set<User>().Include(q=>q.Group).SingleOrDefaultAsync(q => q.Username == user.Username && q.Password == user.Password);
         }
 
        

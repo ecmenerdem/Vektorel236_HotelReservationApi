@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{7D58F439-C58
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebUI", "WebUI", "{24798886-1693-4683-A0BC-BFA33A21646C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelReservation.WebUI", "HotelReservation.WebUI\HotelReservation.WebUI.csproj", "{98DFAB97-5D62-4B3F-A0F5-1876A18E0055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelReservation.WebUI", "HotelReservation.WebUI\HotelReservation.WebUI.csproj", "{98DFAB97-5D62-4B3F-A0F5-1876A18E0055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelReservation.WebHelper", "HotelReservation.WebHelper\HotelReservation.WebHelper.csproj", "{BEC04042-0203-4D48-9ED1-3A77B07B004E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{98DFAB97-5D62-4B3F-A0F5-1876A18E0055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98DFAB97-5D62-4B3F-A0F5-1876A18E0055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98DFAB97-5D62-4B3F-A0F5-1876A18E0055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC04042-0203-4D48-9ED1-3A77B07B004E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC04042-0203-4D48-9ED1-3A77B07B004E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC04042-0203-4D48-9ED1-3A77B07B004E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC04042-0203-4D48-9ED1-3A77B07B004E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{73ADE498-FEE4-452B-B74C-2DC96361C133} = {7D58F439-C586-487F-9F90-2CA5E9DD2B59}
 		{F367BCBE-7CAE-4E95-8F6F-62C32F192403} = {7D58F439-C586-487F-9F90-2CA5E9DD2B59}
 		{98DFAB97-5D62-4B3F-A0F5-1876A18E0055} = {24798886-1693-4683-A0BC-BFA33A21646C}
+		{BEC04042-0203-4D48-9ED1-3A77B07B004E} = {24798886-1693-4683-A0BC-BFA33A21646C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CD05CC7-782E-4FCF-AA2B-4FB31616373B}

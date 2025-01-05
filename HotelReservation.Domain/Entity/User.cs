@@ -23,9 +23,10 @@ namespace HotelReservation.Domain.Entity
         public string Password { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-
+        public int? GroupID { get; set; }
 
         public virtual IEnumerable<Reservation> Reservations { get; set; }
+        public virtual UserGroup Group { get; set; }
 
         //public string FullName {
 
@@ -34,8 +35,8 @@ namespace HotelReservation.Domain.Entity
         //    {
         //        return FirstName+" "+LastName;
         //    }
-            
-        
+
+
         //}
 
         public string FullName => $"{FirstName} {LastName}";

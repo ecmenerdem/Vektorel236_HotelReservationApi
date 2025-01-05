@@ -11,6 +11,9 @@ namespace HotelReservation.Application.DTO.User.Login
 
         public string Token { get; set; }
 
+        public string GrupAdi { get; set; }
+        public string GrupID { get; set; }
+
         public string AdSoyad
         {
 
