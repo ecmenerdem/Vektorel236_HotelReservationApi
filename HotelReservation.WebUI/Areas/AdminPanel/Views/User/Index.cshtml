@@ -1,0 +1,102 @@
+﻿@model List<UserDetailDTO>
+@{
+    ViewData["Title"] = "Kullanıcılar";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+
+@{
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tblUser" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ad</th>
+                                    <th>Soyad</th>
+                                    <th>E-Posta</th>
+                                    <th>Telefon</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                    {
+                                    <tr>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.LastName</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.PhoneNumber</td>
+                                    <td><button type="button" class="btn btn-block btn-success btn-sm btnUserDetail" data-toggle="modal" data-target="#modal-lg" data-guid="@item.Guid">Detaylar</button></td>
+                                    </tr>
+                    }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+}
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Kullanıcı Bilgileri</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="txtAd">Ad</label>
+                    <input type="text" class="form-control" id="txtAd" placeholder="Ad..">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtSoyad">Soyad</label>
+                    <input type="email" class="form-control" id="txtSoyad" placeholder="Soyad..">
+                </div>
+                <div class="form-group">
+                    <label for="txtEposta">E-Posta</label>
+                    <input type="email" class="form-control" id="txtEPosta" placeholder="E-Posta..">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtTel">Telefon</label>
+                    <input type="text" class="form-control" id="txtTel" placeholder="Telefon..">
+                </div>
+               
+              
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    $(function () {
+        $("#tblUser").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#tblUser_wrapper .col-md-6:eq(0)');
+        $('.btnUserDetail').click(function () {
+           var guid =  $(this).attr('data-guid')
+            $.ajax({
+                url: '/Admin/User/' + guid,
+                type:'get',
+                success: function (response) {
+                    $('#txtAd').val(response.user.firstName);
+                    $('#txtSoyad').val(response.user.lastName);
+                    $('#txtEPosta').val(response.user.email);
+                    $('#txtTel').val(response.user.phoneNumber);
+                }
+
+            });
+        });
+    });
+</script>

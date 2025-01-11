@@ -1,4 +1,6 @@
-﻿@{
+﻿@model LoginViewModel
+
+@{
     Layout = null;
 }
 
@@ -29,12 +31,13 @@
             <div class="card-body login-card-body">
                 <!--  Razor Tag -->
                 @{
-                   if (ViewData["LoginError"] is not null)
+                  
+                    if (Model.ExceptionMessage is not null)
                     {
                         <div class="alert alert-danger alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                             <h5><i class="icon fas fa-ban"></i> HATA!</h5>
-                            @ViewData["LoginError"]
+                            @Model.ExceptionMessage
                         </div>
                     }
                 }
@@ -45,7 +48,7 @@
 
                 <form asp-area="AdminPanel" asp-controller="Account" asp-action="AdminLogin" method="post">
                     <div class="input-group mb-3">
-                        <input asp-for="KullaniciAdi" type="text" class="form-control" placeholder="Kullanıcı Adı">
+                        <input asp-for="webLoginRequestDTO.KullaniciAdi" type="text" class="form-control" placeholder="Kullanıcı Adı">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -53,7 +56,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input asp-for="Sifre" type="password" class="form-control" placeholder="Şifre">
+                        <input asp-for="webLoginRequestDTO.Sifre" type="password" class="form-control" placeholder="Şifre">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>

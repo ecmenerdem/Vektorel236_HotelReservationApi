@@ -5,7 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AdminLTE 3 | Blank Page</title>
-
+    <!-- jQuery -->
+    <script src="/AdminUI/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/AdminUI/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -186,6 +189,14 @@
                                     Anasayfa
                                 </p>
                             </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="/Admin/Kullanicilar" class="nav-link">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>
+                                    Kullanıcılar
+                                </p>
+                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -198,7 +209,6 @@
         <div class="content-wrapper">
 
 
-           @RenderBody()
 
             <!-- Content Header (Page header) -->
             <section class="content-header">
@@ -212,36 +222,14 @@
                 </div><!-- /.container-fluid -->
             </section>
 
-           @*  <!-- Main content -->
+            <!-- Main content -->
             <section class="content">
 
-                <!-- Default box -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Title</h3>
+                @RenderBody()
 
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        Start creating your amazing application!
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        Footer
-                    </div>
-                    <!-- /.card-footer-->
-                </div>
-                <!-- /.card -->
 
             </section>
-            <!-- /.content --> *@
+            <!-- /.content --> 
         </div>
         <!-- /.content-wrapper -->
 
@@ -259,10 +247,21 @@
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
-    <!-- jQuery -->
-    <script src="/AdminUI/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="/AdminUI/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+   
+
+    <script src="/AdminUI/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/AdminUI/plugins/jszip/jszip.min.js"></script>
+    <script src="/AdminUI/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/AdminUI/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/AdminUI/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/AdminUI/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
     <!-- AdminLTE App -->
     <script src="/AdminUI/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->

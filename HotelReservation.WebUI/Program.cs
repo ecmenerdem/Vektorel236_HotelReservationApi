@@ -1,4 +1,5 @@
 using HotelReservation.WebHelper;
+using HotelReservation.WebUI.Middleware;
 
 namespace HotelReservation.WebUI
 {
@@ -18,6 +19,8 @@ namespace HotelReservation.WebUI
             var httpContext  = app.Services.GetRequiredService<IHttpContextAccessor>();
             AppHttpContext.Configure(httpContext);
 
+            app.UseGlobalExceptionHandlerMiddleware();
+            app.UseSessionNullCheckMiddleware();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
