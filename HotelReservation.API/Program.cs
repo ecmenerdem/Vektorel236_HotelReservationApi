@@ -8,11 +8,13 @@ using HotelReservation.Application.Contracts.Validation;
 using HotelReservation.Application.UseCases.AppHotel;
 using HotelReservation.Application.UseCases.AppUser;
 using HotelReservation.Application.UseCases.AppUser.Mapping;
+using HotelReservation.Application.UseCases.AppUserGroup;
 using HotelReservation.Domain.Repository.DataManagement;
 using HotelReservation.Infrastructure.Persistence.EFCore.Context;
 using HotelReservation.Infrastructure.Persistence.Repository.EntityFrameworkCore.DataManagement;
 using HotelReservation.Infrastructure.Security;
 using HotelReservation.Infrastructure.Validation;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HotelReservation.API
 {
@@ -36,6 +38,7 @@ namespace HotelReservation.API
             builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
             builder.Services.AddScoped<IUserService,UserManager>();
             builder.Services.AddScoped<IHotelService,HotelManager>();
+            builder.Services.AddScoped<IUserGroupService,UserGroupManager>();
             builder.Services.AddScoped<IGenericValidator,FluentValidator>();
             
             builder.Services.AddScoped<ITokenService,TokenService>();

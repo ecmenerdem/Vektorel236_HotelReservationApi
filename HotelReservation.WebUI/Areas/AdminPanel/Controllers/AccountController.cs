@@ -1,4 +1,5 @@
-﻿using HotelReservation.WebHelper.ApiHelper.Result;
+﻿using HotelReservation.WebHelper.ApiHelper;
+using HotelReservation.WebHelper.ApiHelper.Result;
 using HotelReservation.WebHelper.DTO.Account;
 using HotelReservation.WebHelper.SessionHelper;
 using HotelReservation.WebUI.Areas.AdminPanel.Models.ViewModels.Login;
@@ -30,8 +31,8 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
         {
           
 
-            var client = new RestClient("http://localhost:5211/Login");
-            var request = new RestRequest("http://localhost:5211/Login", Method.Post);
+            var client = new RestClient($"{ApiEndpoint.ApiEndpointURL}/Login");
+            var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/Login", Method.Post);
             request.AddBody(loginViewModel.webLoginRequestDTO, "application/json");
 
             var apiResponse = await client.ExecuteAsync(request);

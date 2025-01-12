@@ -13,8 +13,9 @@ namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFramework
             HotelRepository = new EfHotelRepository(_dbContext);
             RoomRepository = new EfRoomRepository(_dbContext);
             ReservationRepository = new EfReservationRepository(_dbContext);
+            UserGroupRepository=new EfUserGroupRepository(_dbContext);
 
-           
+
         }
 
         public IUserRepository UserRepository { get; }
@@ -24,6 +25,7 @@ namespace HotelReservation.Infrastructure.Persistence.Repository.EntityFramework
         public IRoomRepository RoomRepository { get; }
 
         public IReservationRepository ReservationRepository { get; }
+        public IUserGroupRepository UserGroupRepository { get; }
 
         
 

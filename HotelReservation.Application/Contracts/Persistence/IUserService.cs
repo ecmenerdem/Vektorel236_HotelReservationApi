@@ -1,6 +1,4 @@
-﻿
-
-using HotelReservation.Application.Result;
+﻿using HotelReservation.Application.Result;
 
 namespace HotelReservation.Application.Contracts.Persistence
 {

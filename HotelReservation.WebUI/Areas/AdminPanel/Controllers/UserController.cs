@@ -1,4 +1,5 @@
-﻿using HotelReservation.WebHelper.ApiHelper.Result;
+﻿using HotelReservation.WebHelper.ApiHelper;
+using HotelReservation.WebHelper.ApiHelper.Result;
 using HotelReservation.WebHelper.DTO.User;
 using HotelReservation.WebHelper.SessionHelper;
 using HotelReservation.WebUI.Areas.AdminPanel.Filters;
@@ -19,7 +20,7 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
         public async Task<IActionResult> Index()
         {
             var client = new RestClient();
-            var request = new RestRequest("http://localhost:5211/Users", Method.Get);
+            var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/Users", Method.Get);
 
             request.AddHeader("Authorization","Bearer "+SessionManager.Token);
 
@@ -36,7 +37,7 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
         public async Task<IActionResult> GetUserDetail(Guid guid)
         {
             var client = new RestClient();
-            var request = new RestRequest("http://localhost:5211/User/"+guid, Method.Get);
+            var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/User/"+guid, Method.Get);
 
             request.AddHeader("Authorization", "Bearer " + SessionManager.Token);
 

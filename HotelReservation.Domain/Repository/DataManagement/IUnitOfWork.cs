@@ -12,6 +12,7 @@ namespace HotelReservation.Domain.Repository.DataManagement
         IHotelRepository HotelRepository { get; }
         IRoomRepository RoomRepository { get; } 
         IReservationRepository ReservationRepository { get; }
+        IUserGroupRepository UserGroupRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

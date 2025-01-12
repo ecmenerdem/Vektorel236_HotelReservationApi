@@ -1,0 +1,24 @@
+﻿@model List<UserGroupDTO>
+
+<select class="form-control select2 ddlGroup_Add" style="width: 100%;">
+
+    @{
+        foreach (var item in Model)
+        {
+                <option value="@item.GUID">@item.Adi</option>
+        }
+    }
+
+
+    
+</select>
+<script>
+    $(function () {
+        // $(".select2").select2({
+        //     tags: true,
+        //     dropdownParent: $(".modal")
+        // });
+    
+    })
+
+</script>
