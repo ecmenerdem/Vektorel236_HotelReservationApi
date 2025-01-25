@@ -1,15 +1,15 @@
 USE [master]
 GO
-/****** Object:  Database [HotelReservationDB]    Script Date: 30.11.2024 13:25:47 ******/
+/****** Object:  Database [HotelReservationDB]    Script Date: 25.01.2025 13:42:13 ******/
 CREATE DATABASE [HotelReservationDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'HotelReservationDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\HotelReservationDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'HotelReservationDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\HotelReservationDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'HotelReservationDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\HotelReservationDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT
+( NAME = N'HotelReservationDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\HotelReservationDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
-ALTER DATABASE [HotelReservationDB] SET COMPATIBILITY_LEVEL = 150
+ALTER DATABASE [HotelReservationDB] SET COMPATIBILITY_LEVEL = 160
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
@@ -26,7 +26,7 @@ ALTER DATABASE [HotelReservationDB] SET ANSI_WARNINGS OFF
 GO
 ALTER DATABASE [HotelReservationDB] SET ARITHABORT OFF 
 GO
-ALTER DATABASE [HotelReservationDB] SET AUTO_CLOSE ON 
+ALTER DATABASE [HotelReservationDB] SET AUTO_CLOSE OFF 
 GO
 ALTER DATABASE [HotelReservationDB] SET AUTO_SHRINK OFF 
 GO
@@ -56,11 +56,11 @@ ALTER DATABASE [HotelReservationDB] SET ALLOW_SNAPSHOT_ISOLATION OFF
 GO
 ALTER DATABASE [HotelReservationDB] SET PARAMETERIZATION SIMPLE 
 GO
-ALTER DATABASE [HotelReservationDB] SET READ_COMMITTED_SNAPSHOT OFF 
+ALTER DATABASE [HotelReservationDB] SET READ_COMMITTED_SNAPSHOT ON 
 GO
 ALTER DATABASE [HotelReservationDB] SET HONOR_BROKER_PRIORITY OFF 
 GO
-ALTER DATABASE [HotelReservationDB] SET RECOVERY SIMPLE 
+ALTER DATABASE [HotelReservationDB] SET RECOVERY FULL 
 GO
 ALTER DATABASE [HotelReservationDB] SET  MULTI_USER 
 GO
@@ -76,11 +76,15 @@ ALTER DATABASE [HotelReservationDB] SET DELAYED_DURABILITY = DISABLED
 GO
 ALTER DATABASE [HotelReservationDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
 GO
-ALTER DATABASE [HotelReservationDB] SET QUERY_STORE = OFF
+EXEC sys.sp_db_vardecimal_storage_format N'HotelReservationDB', N'ON'
+GO
+ALTER DATABASE [HotelReservationDB] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [HotelReservationDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
 GO
 USE [HotelReservationDB]
 GO
-/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 30.11.2024 13:25:47 ******/
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 25.01.2025 13:42:13 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -94,7 +98,7 @@ CREATE TABLE [dbo].[__EFMigrationsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Hotel]    Script Date: 30.11.2024 13:25:47 ******/
+/****** Object:  Table [dbo].[Hotel]    Script Date: 25.01.2025 13:42:13 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +109,7 @@ CREATE TABLE [dbo].[Hotel](
 	[Address] [nvarchar](max) NOT NULL,
 	[City] [nvarchar](max) NOT NULL,
 	[Description] [nvarchar](max) NOT NULL,
-	[PhoneNuber] [nvarchar](max) NOT NULL,
+	[PhoneNumber] [nvarchar](max) NOT NULL,
 	[EMail] [nvarchar](max) NOT NULL,
 	[GUID] [uniqueidentifier] NOT NULL,
 	[IsActive] [bit] NULL,
@@ -122,7 +126,7 @@ CREATE TABLE [dbo].[Hotel](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Reservation]    Script Date: 30.11.2024 13:25:47 ******/
+/****** Object:  Table [dbo].[Reservation]    Script Date: 25.01.2025 13:42:13 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -150,7 +154,7 @@ CREATE TABLE [dbo].[Reservation](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Room]    Script Date: 30.11.2024 13:25:47 ******/
+/****** Object:  Table [dbo].[Room]    Script Date: 25.01.2025 13:42:13 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -178,7 +182,7 @@ CREATE TABLE [dbo].[Room](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 30.11.2024 13:25:47 ******/
+/****** Object:  Table [dbo].[User]    Script Date: 25.01.2025 13:42:13 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -191,6 +195,7 @@ CREATE TABLE [dbo].[User](
 	[Password] [nvarchar](100) NOT NULL,
 	[Email] [nvarchar](100) NOT NULL,
 	[PhoneNumber] [nvarchar](20) NOT NULL,
+	[GroupID] [int] NULL,
 	[GUID] [uniqueidentifier] NOT NULL,
 	[IsActive] [bit] NULL,
 	[IsDeleted] [bit] NULL,
@@ -206,13 +211,70 @@ CREATE TABLE [dbo].[User](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241124100501_M1', N'8.0.11')
+/****** Object:  Table [dbo].[UserGroup]    Script Date: 25.01.2025 13:42:13 ******/
+SET ANSI_NULLS ON
 GO
-INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241124102926_M2', N'8.0.11')
+SET QUOTED_IDENTIFIER ON
 GO
-INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241124103100_M3', N'8.0.11')
+CREATE TABLE [dbo].[UserGroup](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[GUID] [uniqueidentifier] NOT NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[AddedUser] [int] NULL,
+	[AddedTime] [datetime2](7) NULL,
+	[AddedIP] [nvarchar](max) NULL,
+	[UpdatedUser] [int] NULL,
+	[UpdatedTime] [datetime2](7) NULL,
+	[UpdatedIP] [nvarchar](max) NULL,
+ CONSTRAINT [PK_UserGroup] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241130065924_M4', N'8.0.11')
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20250125065308_m1', N'8.0.11')
+GO
+SET IDENTITY_INSERT [dbo].[User] ON 
+GO
+INSERT [dbo].[User] ([ID], [FirstName], [LastName], [Username], [Password], [Email], [PhoneNumber], [GroupID], [GUID], [IsActive], [IsDeleted], [AddedUser], [AddedTime], [AddedIP], [UpdatedUser], [UpdatedTime], [UpdatedIP]) VALUES (1, N'Ecmen', N'Erdem', N'ecmen', N'12345', N'ecmen@ecmen.com', N'12345', 1, N'e5099060-7350-4a7c-b39f-aa04605d2df1', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[User] OFF
+GO
+SET IDENTITY_INSERT [dbo].[UserGroup] ON 
+GO
+INSERT [dbo].[UserGroup] ([ID], [Name], [GUID], [IsActive], [IsDeleted], [AddedUser], [AddedTime], [AddedIP], [UpdatedUser], [UpdatedTime], [UpdatedIP]) VALUES (1, N'Admin', N'a4d57b0c-f4ec-4638-b6ff-212b63799261', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+INSERT [dbo].[UserGroup] ([ID], [Name], [GUID], [IsActive], [IsDeleted], [AddedUser], [AddedTime], [AddedIP], [UpdatedUser], [UpdatedTime], [UpdatedIP]) VALUES (2, N'Muhasebe', N'724221fc-ce9e-4f74-a73d-caf6dd785dcc', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+INSERT [dbo].[UserGroup] ([ID], [Name], [GUID], [IsActive], [IsDeleted], [AddedUser], [AddedTime], [AddedIP], [UpdatedUser], [UpdatedTime], [UpdatedIP]) VALUES (3, N'Müşteri', N'2df442a4-7bdb-45d5-a93c-8f21475a0f0e', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[UserGroup] OFF
+GO
+/****** Object:  Index [IX_Reservation_RoomID]    Script Date: 25.01.2025 13:42:13 ******/
+CREATE NONCLUSTERED INDEX [IX_Reservation_RoomID] ON [dbo].[Reservation]
+(
+	[RoomID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Reservation_UserID]    Script Date: 25.01.2025 13:42:13 ******/
+CREATE NONCLUSTERED INDEX [IX_Reservation_UserID] ON [dbo].[Reservation]
+(
+	[UserID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Room_HotelID]    Script Date: 25.01.2025 13:42:13 ******/
+CREATE NONCLUSTERED INDEX [IX_Room_HotelID] ON [dbo].[Room]
+(
+	[HotelID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_User_GroupID]    Script Date: 25.01.2025 13:42:13 ******/
+CREATE NONCLUSTERED INDEX [IX_User_GroupID] ON [dbo].[User]
+(
+	[GroupID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[Hotel] ADD  DEFAULT (CONVERT([bit],(1))) FOR [IsActive]
 GO
@@ -229,6 +291,10 @@ GO
 ALTER TABLE [dbo].[User] ADD  DEFAULT (CONVERT([bit],(1))) FOR [IsActive]
 GO
 ALTER TABLE [dbo].[User] ADD  DEFAULT (CONVERT([bit],(0))) FOR [IsDeleted]
+GO
+ALTER TABLE [dbo].[UserGroup] ADD  DEFAULT (CONVERT([bit],(1))) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[UserGroup] ADD  DEFAULT (CONVERT([bit],(0))) FOR [IsDeleted]
 GO
 ALTER TABLE [dbo].[Reservation]  WITH CHECK ADD  CONSTRAINT [FK_Reservation_Room_RoomID] FOREIGN KEY([RoomID])
 REFERENCES [dbo].[Room] ([ID])
@@ -247,6 +313,12 @@ REFERENCES [dbo].[Hotel] ([ID])
 ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[Room] CHECK CONSTRAINT [FK_Room_Hotel_HotelID]
+GO
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_UserGroup_GroupID] FOREIGN KEY([GroupID])
+REFERENCES [dbo].[UserGroup] ([ID])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_UserGroup_GroupID]
 GO
 USE [master]
 GO
