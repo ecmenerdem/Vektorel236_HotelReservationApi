@@ -2,6 +2,7 @@
 using HotelReservation.Application.DTO.User;
 using HotelReservation.Application.DTO.User.Login;
 using HotelReservation.Application.DTO.User.Registration;
+using HotelReservation.Application.DTO.User.Update;
 using HotelReservation.Application.Result;
 using HotelReservation.Application.UseCases.AppUser;
 using HotelReservation.Domain.Repository.DataManagement;
@@ -45,6 +46,18 @@ namespace HotelReservation.API.Controllers
             //}
             var user = await _userService.AddUser(userRegistrationRequestDTO);
             return Ok(user);
+        }
+        
+        [HttpPut("/User")]
+        [ProducesResponseType(typeof(ApiResult<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateUser(UserUpdateRequestDTO userUpdateRequestDTO)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            var result = await _userService.UpdateUser(userUpdateRequestDTO);
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpDelete("/User/{userGUID}")]

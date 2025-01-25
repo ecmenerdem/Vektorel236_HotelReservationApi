@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelReservation.Application.DTO.User.Update
+﻿namespace HotelReservation.WebHelper.DTO.User
 {
-    public class UserUpdateRequestDTO
+    public class UpdateUserRequestDTO
     {
         public Guid Guid { get; set; }
-
-        [Required]
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string Sifre { get; set; }
         public string EPosta { get; set; }
         public string TelNo { get; set; }
         public Guid? GroupGUID { get; set; }
-
     }
 }

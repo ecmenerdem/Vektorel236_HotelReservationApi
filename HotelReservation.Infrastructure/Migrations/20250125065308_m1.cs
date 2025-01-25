@@ -1,17 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
+namespace HotelReservation.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class M1 : Migration
+    public partial class m1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Hotels",
+                name: "Hotel",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -20,11 +21,11 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNuber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     AddedUser = table.Column<int>(type: "int", nullable: true),
                     AddedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AddedIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -34,7 +35,62 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hotels", x => x.ID);
+                    table.PrimaryKey("PK_Hotel", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserGroup",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    AddedUser = table.Column<int>(type: "int", nullable: true),
+                    AddedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AddedIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedUser = table.Column<int>(type: "int", nullable: true),
+                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedIP = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGroup", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Room",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HotelID = table.Column<int>(type: "int", nullable: false),
+                    RoomType = table.Column<int>(type: "int", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    PricePerNight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsAvalible = table.Column<bool>(type: "bit", nullable: false),
+                    Desciption = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    AddedUser = table.Column<int>(type: "int", nullable: true),
+                    AddedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AddedIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedUser = table.Column<int>(type: "int", nullable: true),
+                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedIP = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Room", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Room_Hotel_HotelID",
+                        column: x => x.HotelID,
+                        principalTable: "Hotel",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,6 +105,7 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                     Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    GroupID = table.Column<int>(type: "int", nullable: true),
                     GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
@@ -62,43 +119,16 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Rooms",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    HotelID = table.Column<int>(type: "int", nullable: false),
-                    RoomType = table.Column<int>(type: "int", nullable: false),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    PricePerNight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsAvalible = table.Column<bool>(type: "bit", nullable: false),
-                    Desciption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
-                    AddedUser = table.Column<int>(type: "int", nullable: true),
-                    AddedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AddedIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedUser = table.Column<int>(type: "int", nullable: true),
-                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedIP = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rooms", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Rooms_Hotels_HotelID",
-                        column: x => x.HotelID,
-                        principalTable: "Hotels",
+                        name: "FK_User_UserGroup_GroupID",
+                        column: x => x.GroupID,
+                        principalTable: "UserGroup",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reservations",
+                name: "Reservation",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -110,8 +140,8 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                     NumberOfGuest = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     AddedUser = table.Column<int>(type: "int", nullable: true),
                     AddedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AddedIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -121,15 +151,15 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservations", x => x.ID);
+                    table.PrimaryKey("PK_Reservation", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Reservations_Rooms_RoomID",
+                        name: "FK_Reservation_Room_RoomID",
                         column: x => x.RoomID,
-                        principalTable: "Rooms",
+                        principalTable: "Room",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservations_User_UserID",
+                        name: "FK_Reservation_User_UserID",
                         column: x => x.UserID,
                         principalTable: "User",
                         principalColumn: "ID",
@@ -137,35 +167,43 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_RoomID",
-                table: "Reservations",
+                name: "IX_Reservation_RoomID",
+                table: "Reservation",
                 column: "RoomID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_UserID",
-                table: "Reservations",
+                name: "IX_Reservation_UserID",
+                table: "Reservation",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rooms_HotelID",
-                table: "Rooms",
+                name: "IX_Room_HotelID",
+                table: "Room",
                 column: "HotelID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_GroupID",
+                table: "User",
+                column: "GroupID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Reservations");
+                name: "Reservation");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "Room");
 
             migrationBuilder.DropTable(
                 name: "User");
 
             migrationBuilder.DropTable(
-                name: "Hotels");
+                name: "Hotel");
+
+            migrationBuilder.DropTable(
+                name: "UserGroup");
         }
     }
 }

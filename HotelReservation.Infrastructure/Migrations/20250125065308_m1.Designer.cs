@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
+namespace HotelReservation.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelReservationAPIContext))]
-    [Migration("20250105071234_M6")]
-    partial class M6
+    [Migration("20250125065308_m1")]
+    partial class m1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

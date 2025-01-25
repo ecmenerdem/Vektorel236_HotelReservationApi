@@ -112,7 +112,7 @@ namespace HotelReservation.Application.UseCases.AppUser
 
         public async Task<ApiResult<UserDTO>> GetUserByGuid(Guid guid)
         {
-            var user = await _uow.UserRepository.GetAsync(q => q.GUID == guid);
+            var user = await _uow.UserRepository.GetAsync(q => q.GUID == guid, "Group");
 
             if (user is null)
             {
@@ -188,17 +188,30 @@ namespace HotelReservation.Application.UseCases.AppUser
             return ApiResult<LoginResponseDTO>.SuccesResult(loginUserDTO);
         }
 
-        public async Task<bool> UpdateUser(UserUpdateRequestDTO userUpdateDTO)
+        public async Task<ApiResult<bool>> UpdateUser(UserUpdateRequestDTO userUpdateDTO)
         {
-            await _validator.ValidateAsync(userUpdateDTO, typeof(UserUpdateValidator));
+            var group = await _uow.UserGroupRepository.GetAsync(q => q.GUID == userUpdateDTO.GroupGUID);
 
-            var existUser = await _uow.UserRepository.GetAsync(q => q.GUID == userUpdateDTO.Guid);
-            if (existUser is not null)
+            if (group != null)
             {
-                existUser = _mapper.Map<User>(userUpdateDTO);
+                await _validator.ValidateAsync(userUpdateDTO, typeof(UserUpdateValidator));
+
+                var existUser = await _uow.UserRepository.GetAsync(q => q.GUID == userUpdateDTO.Guid);
+                if (existUser is not null)
+                {
+                    existUser = _mapper.Map<User>(userUpdateDTO);
+                    existUser.GroupID=group.ID;
+                }
+                _uow.UserRepository.Update(existUser);
+                return ApiResult<bool>.SuccesResult(true);
+
             }
-            _uow.UserRepository.Update(existUser);
-            return true;
+            else {
+
+                throw new Exception("Grup Bilgisi Hatalı");
+            }
+
+          
         }
     }
 }

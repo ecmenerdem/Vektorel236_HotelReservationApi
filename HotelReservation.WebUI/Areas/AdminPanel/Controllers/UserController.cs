@@ -50,7 +50,27 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
 
             return Json(new { success = true, user });
         }
-        
+
+
+        [HttpPost("/Admin/UpdateUser")]
+        public async Task<IActionResult> UpdateUser(UpdateUserRequestDTO updateUserRequestDTO)
+        {
+            updateUserRequestDTO.Sifre = "12345";
+            var client = new RestClient();
+            var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/User/", Method.Put);
+
+            request.AddHeader("Authorization", "Bearer " + SessionManager.Token);
+            request.AddBody(updateUserRequestDTO);
+
+            var apiResponse = await client.ExecuteAsync(request);
+
+            var responseObject = JsonSerializer.Deserialize<ApiResult<bool>>(apiResponse.Content);
+
+            var result = responseObject.Data;
+
+            return Json(new { success = result });
+        }
+
 
     }
 }

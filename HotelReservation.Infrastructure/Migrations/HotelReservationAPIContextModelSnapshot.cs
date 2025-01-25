@@ -4,19 +4,16 @@ using HotelReservation.Infrastructure.Persistence.EFCore.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
+namespace HotelReservation.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelReservationAPIContext))]
-    [Migration("20241124102926_M2")]
-    partial class M2
+    partial class HotelReservationAPIContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +73,7 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNuber")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -91,7 +88,7 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Hotels");
+                    b.ToTable("Hotel", (string)null);
                 });
 
             modelBuilder.Entity("HotelReservation.Domain.Entity.Reservation", b =>
@@ -258,6 +255,9 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("GroupID")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -299,7 +299,59 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("GroupID");
+
                     b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("HotelReservation.Domain.Entity.UserGroup", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("AddedIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("AddedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("AddedUser")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("GUID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool?>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UpdatedIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedUser")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UserGroup", (string)null);
                 });
 
             modelBuilder.Entity("HotelReservation.Domain.Entity.Reservation", b =>
@@ -332,6 +384,16 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
                     b.Navigation("Hotel");
                 });
 
+            modelBuilder.Entity("HotelReservation.Domain.Entity.User", b =>
+                {
+                    b.HasOne("HotelReservation.Domain.Entity.UserGroup", "Group")
+                        .WithMany("Users")
+                        .HasForeignKey("GroupID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("HotelReservation.Domain.Entity.Hotel", b =>
                 {
                     b.Navigation("Rooms");
@@ -345,6 +407,11 @@ namespace HotelReservation.Infrastructure.Persistence.EFCore.Migrations
             modelBuilder.Entity("HotelReservation.Domain.Entity.User", b =>
                 {
                     b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("HotelReservation.Domain.Entity.UserGroup", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

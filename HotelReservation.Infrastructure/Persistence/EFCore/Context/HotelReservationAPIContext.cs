@@ -6,7 +6,7 @@
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("data source=LAB5-OGRETMEN\\SQLEXPRESS;initial catalog=HotelReservationDB;integrated security=True;trustservercertificate=True");
+                optionsBuilder.UseSqlServer("data source=LAB506-OGRETMEN;initial catalog=HotelReservationDB;integrated security=True;trustservercertificate=True");
             }
 
             base.OnConfiguring(optionsBuilder);

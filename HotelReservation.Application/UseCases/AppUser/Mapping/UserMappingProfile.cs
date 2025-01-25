@@ -10,7 +10,9 @@
                 .ForMember(dest=>dest.LastName,opt=>opt.MapFrom(src=>src.LastName))
                 .ForMember(dest=>dest.Username,opt=>opt.MapFrom(src=>src.Username))
                 .ForMember(dest=>dest.Email,opt=>opt.MapFrom(src=>src.Email))
-                .ForMember(dest=>dest.PhoneNumber,opt=>opt.MapFrom(src=>src.PhoneNumber)).ReverseMap();
+                .ForMember(dest=>dest.PhoneNumber,opt=>opt.MapFrom(src=>src.PhoneNumber))
+                .ForMember(dest=>dest.UserGroupGUID,opt=>opt.MapFrom(src=>src.Group.GUID))
+                .ReverseMap();
 
 
         }

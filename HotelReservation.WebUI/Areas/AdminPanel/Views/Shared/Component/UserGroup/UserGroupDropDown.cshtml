@@ -1,11 +1,20 @@
-﻿@model List<UserGroupDTO>
+﻿@model UserGroupDropDownViewModel
 
-<select class="form-control select2 ddlGroup_Add" style="width: 100%;">
+<select class="form-control" style="width: 100%;" id="@Model.ElementID">
 
     @{
-        foreach (var item in Model)
+        foreach (var item in Model.Data)
         {
+            if (Model.SelectedItemGUID==item.GUID)
+            {
+                <option selected="selected" value="@item.GUID">@item.Adi</option>
+            }
+            else
+            {
                 <option value="@item.GUID">@item.Adi</option>
+            }
+            
+               
         }
     }
 
@@ -14,6 +23,7 @@
 </select>
 <script>
     $(function () {
+
         // $(".select2").select2({
         //     tags: true,
         //     dropdownParent: $(".modal")
