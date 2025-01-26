@@ -199,10 +199,15 @@ namespace HotelReservation.Application.UseCases.AppUser
                 var existUser = await _uow.UserRepository.GetAsync(q => q.GUID == userUpdateDTO.Guid);
                 if (existUser is not null)
                 {
-                    existUser = _mapper.Map<User>(userUpdateDTO);
+
+                    existUser.FirstName = userUpdateDTO.Ad;
+                    existUser.LastName = userUpdateDTO.Soyad;
+                    existUser.Email = userUpdateDTO.EPosta;
+                    existUser.PhoneNumber = userUpdateDTO.TelNo;
                     existUser.GroupID=group.ID;
                 }
                 _uow.UserRepository.Update(existUser);
+                await _uow.SaveChangeAsync();
                 return ApiResult<bool>.SuccesResult(true);
 
             }

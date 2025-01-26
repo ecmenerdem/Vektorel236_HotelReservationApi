@@ -16,7 +16,8 @@ namespace HotelReservation.Application.UseCases.AppUser.Mapping
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Soyad))
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Sifre))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.EPosta))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.TelNo)).ReverseMap();
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.TelNo)) 
+                .ReverseMap();
         }
     }
 }

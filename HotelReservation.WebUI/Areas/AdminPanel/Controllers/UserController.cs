@@ -12,7 +12,6 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
 {
     [Area("AdminPanel")]
     [AuthorizeRoles("Admin", "Muhasebe")]
-
     public class UserController : Controller
     {
 
@@ -48,19 +47,49 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
 
             var user = responseObject.Data;
 
-            return Json(new { success = true, user });
+            if (apiResponse.StatusCode==HttpStatusCode.OK) {
+                return Json(new { success = true, user });
+
+            }
+            return Json(new { success = false, errors=responseObject.Error.Errors });
         }
 
 
         [HttpPost("/Admin/UpdateUser")]
         public async Task<IActionResult> UpdateUser(UpdateUserRequestDTO updateUserRequestDTO)
         {
-            updateUserRequestDTO.Sifre = "12345";
             var client = new RestClient();
             var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/User/", Method.Put);
 
             request.AddHeader("Authorization", "Bearer " + SessionManager.Token);
-            request.AddBody(updateUserRequestDTO);
+
+            request.AddBody(updateUserRequestDTO,"application/json");
+
+            var apiResponse = await client.ExecuteAsync(request);
+
+            var responseObject = JsonSerializer.Deserialize<ApiResult<object>>(apiResponse.Content);
+
+            var result = responseObject.Data;
+
+
+            if (apiResponse.StatusCode == HttpStatusCode.OK)
+            {
+                return Json(new { success = result });
+            }
+            else
+            {
+                return Json(new { success = false, error = string.Join("<br />", responseObject.Error.Errors) });
+            }
+
+        }
+
+        [HttpPost("/Admin/DeleteUser/{userGUID}")]
+        public async Task<IActionResult> DeleteUser(Guid userGUID)
+        {
+            var client = new RestClient();
+            var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/User/"+ userGUID, Method.Delete);
+
+            request.AddHeader("Authorization", "Bearer " + SessionManager.Token);
 
             var apiResponse = await client.ExecuteAsync(request);
 
@@ -68,9 +97,45 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
 
             var result = responseObject.Data;
 
-            return Json(new { success = result });
+
+            if (apiResponse.StatusCode == HttpStatusCode.OK)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error= string.Join("<br />", responseObject.Error.Errors) });
+            }
+           
         }
 
 
+        [HttpPost("/Admin/AddUser")]
+        public async Task<IActionResult> AddUser(AddUserRequestDTO addUserRequestDTO)
+        {
+            var client = new RestClient();
+            var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/User/", Method.Post);
+
+            request.AddHeader("Authorization", "Bearer " + SessionManager.Token);
+
+            request.AddBody(addUserRequestDTO, "application/json");
+
+            var apiResponse = await client.ExecuteAsync(request);
+
+            var responseObject = JsonSerializer.Deserialize<ApiResult<UserDetailDTO>>(apiResponse.Content);
+
+            var result = responseObject.Data;
+
+
+            if (apiResponse.StatusCode == HttpStatusCode.OK)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, error = string.Join("<br />", responseObject.Error.Errors) });
+            }
+
+        }
     }
 }

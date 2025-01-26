@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HotelReservation.Application.DTO.User.Registration
+﻿namespace HotelReservation.WebHelper.DTO.User
 {
-    public class UserRegistrationRequestDTO
+    public class AddUserRequestDTO
     {
-        //[Required(ErrorMessage ="Ad Zorunlu Olarak Girilmelidir")]
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string KullaniciAdi { get; set; }

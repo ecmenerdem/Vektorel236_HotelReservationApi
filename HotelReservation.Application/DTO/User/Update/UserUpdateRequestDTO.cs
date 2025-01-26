@@ -11,7 +11,7 @@ namespace HotelReservation.Application.DTO.User.Update
     {
         public Guid Guid { get; set; }
 
-        [Required]
+        //[Required(ErrorMessage ="Ad alanı Zorunlu Olarak Doldurulmalıdır")]
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string Sifre { get; set; }

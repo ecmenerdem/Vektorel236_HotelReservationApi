@@ -50,7 +50,7 @@ namespace HotelReservation.API.Middleware
 
 
                 ErrorResult errorResult = new ErrorResult(errors);
-                await httpContext.Response.WriteAsJsonAsync(ApiResult<bool>.FailureResult(errorResult), new JsonSerializerOptions() { PropertyNamingPolicy = null });
+                await httpContext.Response.WriteAsJsonAsync(ApiResult<object>.FailureResult(errorResult), new JsonSerializerOptions() { PropertyNamingPolicy = null });
             }
             
         }

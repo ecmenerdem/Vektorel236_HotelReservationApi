@@ -5,43 +5,47 @@
 }
 
 @{
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Kullanıcılar</h3>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Kullanıcılar</h3>
 
-            <div class="card-tools">
-                <a href="#" class="btn btn-primary" title="Previous" data-toggle="modal" data-target="#modal-user-add">Kullanıcı Ekle</a>
+                <div class="card-tools">
+                    <a href="#" class="btn btn-primary" title="Previous" data-toggle="modal" data-target="#modal-user-add">Kullanıcı Ekle</a>
 
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tblUser" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>E-Posta</th>
+                            <th>Telefon</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                    {
+                            <tr>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.Email</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>
+                                <button type="button" class="btn btn-block btn-success btn-sm btnUserDetail" data-toggle="modal" data-target="#modal-user-update" data-guid="@item.Guid">Detaylar</button>
+
+                                <button type="button" class="btn btn-block btn-danger btn-sm btnUserDelete" data-guid="@item.Guid">Sil</button>
+                                </td>
+                            </tr>
+                    }
+                    </tbody>
+
+                </table>
             </div>
         </div>
-        <div class="card-body">
-            <table id="tblUser" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Ad</th>
-                        <th>Soyad</th>
-                        <th>E-Posta</th>
-                        <th>Telefon</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.FirstName</td>
-                            <td>@item.LastName</td>
-                            <td>@item.Email</td>
-                            <td>@item.PhoneNumber</td>
-                            <td><button type="button" class="btn btn-block btn-success btn-sm btnUserDetail" data-toggle="modal" data-target="#modal-user-update" data-guid="@item.Guid">Detaylar</button></td>
-                        </tr>
-                    }
-                </tbody>
-
-            </table>
-        </div>
-    </div>
 
 }
 <div class="modal fade" id="modal-user-add">
@@ -64,20 +68,24 @@
                     <label for="txtSoyad_Add">Soyad</label>
                     <input type="email" class="form-control" id="txtSoyad_Add" placeholder="Soyad..">
                 </div>
-
+                <div class="form-group">
+                    <label for="txtKullaniciAdi_Add">Kullanıcı Adı</label>
+                    <input type="text" class="form-control" id="txtKullaniciAdi_Add" placeholder="Kullanıcı Adı..">
+                </div> 
+                <div class="form-group">
+                    <label for="txtSifre_Add">Şifre</label>
+                    <input type="password" class="form-control" id="txtSifre_Add" placeholder="Şifre..">
+                </div>
                 <div class="form-group">
                     <label for="ddlGroup_Add">Grubu</label>
                     @{
-                        @await Component.InvokeAsync("UserGroupDropDown", new UserGroupDropDownViewModel()
+                            @await Component.InvokeAsync("UserGroupDropDown", new UserGroupDropDownViewModel()
             {
                 ElementID = "ddlUserGroup_Add"
             })
                     }
                     
                 </div>
-
-
-
 
                 <div class="form-group">
                     <label for="txtEPosta_Add">E-Posta</label>
@@ -218,18 +226,111 @@
                 type: 'post',
                 data:{updateUserRequestDTO},
                 success: function (response) {
-                   
-                    Swal.fire({
-                      title: "İşlem Başarılı!",
-                      html: "Kullanıcı Başarıyla Güncellendi. Sayfa Tekrar Yükleniyor",
-                      timer: 3000,
-                    }).then((result) => {
-                      window.location.reload();
-                    });
+                    if (response.success) {
+                        Swal.fire({
+                            title: "İşlem Başarılı!",
+                            html: "Kullanıcı Başarıyla Güncellendi. Sayfa Tekrar Yükleniyor",
+                            timer: 3000,
+                        }).then((result) => {
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: "İşlem Başarısız!",
+                            html: response.error,
+                            icon:"error"
+                        });
+                    }
+                  
 
                 }
 
             });
+
+        });
+        $('#btnAddUser').click(function () {
+
+            var addUserRequestDTO = {
+               Ad:$('#txtAd_Add').val(),
+               Soyad:$('#txtSoyad_Add').val(),
+               EPosta:$('#txtEPosta_Add').val(),
+               TelNo:$('#txtTel_Add').val(),
+                KullaniciAdi: $('#txtKullaniciAdi_Add').val(),
+                Sifre: $('#txtSifre_Add').val(),
+               GroupGUID:$('#ddlUserGroup_Add').val(),
+           }
+
+           
+            $.ajax({
+                url: '/Admin/AddUser/',
+                type: 'post',
+                data: { addUserRequestDTO },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "İşlem Başarılı!",
+                            html: "Kullanıcı Başarıyla Eklendi. Sayfa Tekrar Yükleniyor",
+                            timer: 3000,
+                        }).then((result) => {
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: "İşlem Başarısız!",
+                            html: response.error,
+                            icon:"error"
+                        });
+                    }
+                  
+
+                }
+
+            });
+
+        });
+        $('.btnUserDelete').click(function () {
+            var guid = $(this).attr('data-guid');
+          
+            Swal.fire({
+                title: "Silmek İstediğinizden Emin misiniz??",
+                showDenyButton: true,
+                confirmButtonText: "Sil",
+                denyButtonText: `Vazgeç`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Admin/DeleteUser/' + guid,
+                        type: 'post',
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "İşlem Başarılı!",
+                                    html: "Kullanıcı Başarıyla Silindi. Sayfa Tekrar Yükleniyor",
+                                    timer: 3000,
+                                }).then((result) => {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire({
+                                    title: "İşlem Başarısız!",
+                                    html: response.error,
+                                    icon: "error"
+                                });
+                            }
+
+
+                        }
+
+                    });
+
+                }
+            });
+
+           
 
         });
 
