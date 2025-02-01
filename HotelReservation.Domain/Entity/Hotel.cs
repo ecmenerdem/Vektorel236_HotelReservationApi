@@ -22,7 +22,7 @@ namespace HotelReservation.Domain.Entity
         public string Description { get; set; }
         public string PhoneNumber { get; set; }
         public string EMail { get; set; }
-      
+        public string FeaturedImage { get; set; }
 
 
         //Navigation Properties

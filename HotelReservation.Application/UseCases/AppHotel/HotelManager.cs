@@ -69,7 +69,6 @@ namespace HotelReservation.Application.UseCases.AppHotel
             }
 
             var hotelDTOList = _mapper.Map<IEnumerable<HotelDTO>>(hotels);
-
             return ApiResult<IEnumerable<HotelDTO>>.SuccesResult(hotelDTOList);
 
         }

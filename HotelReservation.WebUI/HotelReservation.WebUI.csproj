@@ -15,6 +15,7 @@
     <Folder Include="Areas\AdminPanel\Data\" />
     <Folder Include="Areas\UserPanel\Data\" />
     <Folder Include="Areas\UserPanel\Models\" />
+    <Folder Include="wwwroot\MediaUpload\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,131 @@
+﻿@model List<HotelDetailDTO>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+
+@{
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Oteller</h3>
+
+                <div class="card-tools">
+                    <a href="#" class="btn btn-primary" title="Previous" data-toggle="modal" data-target="#modal-hotel-add">Otel Ekle</a>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tblHotel" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ad</th>
+                            <th>Şehir</th>
+                            <th>E-Posta</th>
+                            <th>Telefon</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                    {
+                            <tr>
+                                <td>@item.Ad</td>
+                                <td>@item.Sehir</td>
+                                <td>@item.EPosta</td>
+                                <td>@item.Tel</td>
+                                <td>
+                                    <button type="button" class="btn btn-block btn-success btn-sm btnUserDetail" data-toggle="modal" data-target="#modal-hotel-update" data-guid="@item.Guid">Detaylar</button>
+
+                                    <button type="button" class="btn btn-block btn-danger btn-sm btnHotelDelete" data-guid="@item.Guid">Sil</button>
+                                </td>
+                            </tr>
+                    }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    <div class="modal fade" id="modal-hotel-add">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Otel Bilgileri</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="txtAd_Add">Ad</label>
+                        <input type="text" class="form-control" id="txtAd_Add" placeholder="Ad..">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtAdres_Add">Adres</label>
+                        <input type="text" class="form-control" id="txtAdres_Add" placeholder="Adres..">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ddlCity_Add">Şehir</label>
+                        <select class="form-control" style="width: 100%;" id="ddlCity_Add">
+                            <option value="Ankara">Ankara</option>
+                            <option value="İstanbul">İstanbul</option>
+                            <option value="İzmir">İzmir</option>
+                            <option value="Antalya">Antalya</option>
+                        
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtAd_Add">Açıklama</label>
+                        <input type="text" class="form-control" id="txtAciklama_Add" placeholder="Ad..">
+                    </div>
+                   
+
+                    <div class="form-group">
+                        <label for="txtEPosta_Add">E-Posta</label>
+                        <input type="email" class="form-control" id="txtEPosta_Add" placeholder="E-Posta..">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTel">Telefon</label>
+                        <input type="text" class="form-control" id="txtTel_Add" placeholder="Telefon..">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fuHotelFeaturedImage_Add">Öne Çıkan Görsel</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="fuHotelFeaturedImage_Add">
+                                <label class="custom-file-label" for="fuHotelFeaturedImage_Add">Choose file</label>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" id="btnAddHotel">Kaydet</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+}
+<script>
+    $(function () {
+
+        $("#tblHotel").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#tblUser_wrapper .col-md-6:eq(0)');
+    });
+
+
+</script>
