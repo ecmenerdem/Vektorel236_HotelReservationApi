@@ -18,6 +18,7 @@
                 <table id="tblHotel" class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Ad</th>
                             <th>Şehir</th>
                             <th>E-Posta</th>
@@ -29,7 +30,15 @@
 
                         @foreach (var item in Model)
                     {
+                        string hotelImagePath = "/MediaUpload/" + item.FeaturedImage;
+
                             <tr>
+                            <td>
+                                <a href="@hotelImagePath" data-toggle="lightbox" data-title="@item.Ad" data-gallery="gallery">
+                                    <img src="@hotelImagePath" class="img-fluid mb-2" alt="@item.Ad" width="100" />
+                                </a>
+                            
+                            </td>
                                 <td>@item.Ad</td>
                                 <td>@item.Sehir</td>
                                 <td>@item.EPosta</td>
@@ -125,6 +134,66 @@
             "responsive": true, "lengthChange": false, "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#tblUser_wrapper .col-md-6:eq(0)');
+
+          
+
+        $('#btnAddHotel').click(function(){
+
+               var addHotelRequestDTO = {
+                   Ad:$('#txtAd_Add').val(),
+                   Adres:$('#txtAdres_Add').val(),
+                   Sehir:$('#ddlCity_Add').val(),
+                   Aciklama:$('#txtAciklama_Add').val(),
+                   Tel:$('#txtTel_Add').val(),
+                   EPosta:$('#txtEPosta_Add').val()
+               
+               };
+
+                   var files = $('#fuHotelFeaturedImage_Add').prop('files');
+
+
+                   var formData = new FormData();
+
+                  formData.append("Ad",addHotelRequestDTO.Ad);
+                  formData.append("Adres",addHotelRequestDTO.Adres);
+                  formData.append("Sehir",addHotelRequestDTO.Sehir);
+                  formData.append("Aciklama",addHotelRequestDTO.Aciklama);
+                  formData.append("Tel",addHotelRequestDTO.Tel);
+                  formData.append("EPosta",addHotelRequestDTO.EPosta);
+                  formData.append("hotelImage",files[0]);
+
+                  $.ajax({
+                    url:'/Admin/AddHotel',
+                    type:'post',
+                    data:formData,
+                    cache:false,
+                    contentType:false,
+                    processData:false,
+                    success:function(response){
+                        if (response.success) {
+                            Swal.fire({
+                                title: "İşlem Başarılı!",
+                                html: "Otel Başarıyla Eklendi. Sayfa Tekrar Yükleniyor",
+                                timer: 3000,
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                title: "İşlem Başarısız!",
+                                html: response.error,
+                                icon:"error"
+                            });
+                        }
+                    }
+
+                  });
+
+
+        });
+
+
     });
 
 

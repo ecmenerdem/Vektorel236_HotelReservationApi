@@ -19,6 +19,7 @@ namespace HotelReservation.Application.UseCases.AppHotel.Mapping
                 .ForMember(dest => dest.Aciklama, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Ad, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Tel, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.FeaturedImage, opt => opt.MapFrom(src => src.FeaturedImage))
                 .ReverseMap();
         }
     }

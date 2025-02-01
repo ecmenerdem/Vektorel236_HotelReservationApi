@@ -15,5 +15,7 @@ namespace HotelReservation.Application.DTO.Hotel
         public string Aciklama { get; set; }
         public string Tel { get; set; }
         public string EPosta { get; set; }
+        public string FeaturedImage { get; set; }
+
     }
 }

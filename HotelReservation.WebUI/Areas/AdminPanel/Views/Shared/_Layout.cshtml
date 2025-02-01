@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="/AdminUI/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/AdminUI/dist/css/adminlte.min.css">
+
+    <link rel="stylesheet" href="/AdminUI/plugins/ekko-lightbox/ekko-lightbox.css">
 </head>
 <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
@@ -285,12 +287,21 @@
 
     <script src="/AdminUI/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
+    <script src="/AdminUI/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+
 
 </body>
 </html>
 <script>
     $(function(){
         bsCustomFileInput.init();
+
+      $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+      event.preventDefault();
+      $(this).ekkoLightbox({
+        alwaysShowClose: true
+      });
+    });
     });
 </script>
 

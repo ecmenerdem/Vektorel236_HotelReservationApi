@@ -16,6 +16,14 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
 
     public class HotelController : Controller
     {
+       
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public HotelController(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment=webHostEnvironment;
+        }
+
         [HttpGet("/Admin/Oteller")]
         public async Task<IActionResult> Index()
         {
@@ -36,9 +44,21 @@ namespace HotelReservation.WebUI.Areas.AdminPanel.Controllers
             return View(Enumerable.Empty<HotelDetailDTO>().ToList());
         }
 
-
+        [HttpPost("Admin/AddHotel")]
         public async Task<IActionResult> AddHotel(AddHotelRequestDTO addHotelRequestDTO, IFormFile hotelImage)
         {
+
+            string fileName = hotelImage.FileName.Split('.')[hotelImage.FileName.Split('.').Length-2]+"_"+Guid.NewGuid()+"."+hotelImage.FileName.Split('.')[hotelImage.FileName.Split('.').Length-1];
+
+            string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "MediaUpload", fileName);
+
+            using (var fileStream = new FileStream(uploadFolder,FileMode.Create))
+            {
+                hotelImage.CopyTo(fileStream);
+            }
+
+            addHotelRequestDTO.FeaturedImage=fileName;
+
             var client = new RestClient();
             var request = new RestRequest($"{ApiEndpoint.ApiEndpointURL}/Hotel/", Method.Post);
 
